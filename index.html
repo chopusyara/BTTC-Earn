@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <meta name="theme-color" content="#050511">
+
+    <title>BTTC Earn</title>
+
+    <!-- Telegram Mini App -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- =========================================
+             TOP HEADER
+        ========================================== -->
+
+        <header class="top-header">
+
+            <!-- USER -->
+            <div class="user-section">
+
+                <div class="avatar-wrapper">
+
+                    <img
+                        id="userAvatar"
+                        class="avatar"
+                        src="assets/avatar.png"
+                        alt="Profile"
+                    >
+
+                    <div class="crown">
+                        ♛
+                    </div>
+
+                </div>
+
+                <div class="user-info">
+
+                    <h1 id="userName">
+                        Alex
+                    </h1>
+
+                    <div class="user-id">
+
+                        <span>
+                            ID:
+                            <span id="telegramId">
+                                9383173901
+                            </span>
+                        </span>
+
+                        <button
+                            class="copy-button"
+                            id="copyId"
+                            aria-label="Copy ID"
+                        >
+                            ⧉
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BALANCES -->
+
+            <div class="balance-section">
+
+                <!-- USDT -->
+
+                <button class="balance-card">
+
+                    <div class="balance-icon usdt-icon">
+                        ₮
+                    </div>
+
+                    <div class="balance-content">
+
+                        <strong id="usdtBalance">
+                            10.72
+                        </strong>
+
+                        <span>
+                            USDT
+                        </span>
+
+                    </div>
+
+                    <span class="balance-arrow">
+                        ›
+                    </span>
+
+                </button>
+
+
+                <!-- BTTC -->
+
+                <button class="balance-card">
+
+                    <div class="balance-icon bttc-icon">
+                        C
+                    </div>
+
+                    <div class="balance-content">
+
+                        <strong id="bttcBalance">
+                            15,00,000
+                        </strong>
+
+                        <span>
+                            BTTC
+                        </span>
+
+                    </div>
+
+                    <span class="balance-arrow">
+                        ›
+                    </span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================================
+             HERO SECTION
+        ========================================== -->
+
+        <main>
+
+            <section class="hero-section">
+
+                <div class="hero-glow"></div>
+
+                <img
+                    id="heroImage"
+                    class="hero-image"
+                    src="assets/hero.webp"
+                    alt="BTTC Earn"
+                >
+
+            </section>
+
+
+            <!-- =====================================
+                 START EARNING
+            ====================================== -->
+
+            <section class="start-section">
+
+                <button
+                    class="start-button"
+                    id="startEarning"
+                >
+
+                    <span class="rocket">
+                        🚀
+                    </span>
+
+                    <span>
+                        Start Earning
+                    </span>
+
+                </button>
+
+            </section>
+
+
+            <!-- =====================================
+                 QUICK ACTIONS
+            ====================================== -->
+
+            <section class="quick-actions">
+
+                <button
+                    class="quick-card daily-card"
+                    data-page="daily"
+                >
+
+                    <div class="quick-icon">
+                        📅
+                    </div>
+
+                    <span>
+                        Daily
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="quick-card event-card"
+                    data-page="event"
+                >
+
+                    <div class="quick-icon">
+                        🎉
+                    </div>
+
+                    <span>
+                        Event
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="quick-card shop-card"
+                    data-page="shop"
+                >
+
+                    <div class="quick-icon">
+                        🛍️
+                    </div>
+
+                    <span>
+                        Shop
+                    </span>
+
+                </button>
+
+            </section>
+
+        </main>
+
+
+        <!-- =========================================
+             BOTTOM NAVIGATION
+        ========================================== -->
+
+        <nav class="bottom-nav">
+
+            <button
+                class="nav-item active"
+                data-page="home"
+            >
+
+                <span class="nav-icon">
+                    ⌂
+                </span>
+
+                <span>
+                    Home
+                </span>
+
+            </button>
+
+
+            <button
+                class="nav-item"
+                data-page="referrals"
+            >
+
+                <span class="nav-icon">
+                    ♣
+                </span>
+
+                <span>
+                    Referrals
+                </span>
+
+            </button>
+
+
+            <button
+                class="nav-item"
+                data-page="task"
+            >
+
+                <span class="nav-icon">
+                    ☑
+                </span>
+
+                <span>
+                    Task
+                </span>
+
+            </button>
+
+
+            <button
+                class="nav-item"
+                data-page="profile"
+            >
+
+                <span class="nav-icon">
+                    ●
+                </span>
+
+                <span>
+                    Profile
+                </span>
+
+            </button>
+
+        </nav>
+
+    </div>
+
+
+    <script src="app.js"></script>
+
+</body>
+</html>
