@@ -125,7 +125,29 @@ async function loadTelegramUser() {
                 user.telegram_id;
 
         }
+const usdtBalance =
+    document.getElementById("usdtBalance");
 
+const bttcBalance =
+    document.getElementById("bttcBalance");
+
+
+if (
+    usdtBalance &&
+    user.balance_usdt !== undefined
+) {
+    usdtBalance.textContent =
+        Number(user.balance_usdt).toFixed(2);
+}
+
+
+if (
+    bttcBalance &&
+    user.balance_bttc !== undefined
+) {
+    bttcBalance.textContent =
+        Number(user.balance_bttc).toLocaleString("en-IN");
+}
 
         console.log(
             "Verified BTTC user:",
