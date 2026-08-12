@@ -1,7 +1,9 @@
-/* =====================================================
-   BTTC EARN
-   Main visual system
-===================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+
+/* =========================================================
+   ROOT
+========================================================= */
 
 :root {
 
@@ -15,43 +17,47 @@
     --blue: #3158ff;
     --blue-light: #6b8cff;
 
+    --green: #26e0a7;
     --orange: #ff9f1c;
 
     --white: #ffffff;
+
+    --text: #e6e6f3;
     --text-soft: #b8b8c7;
 
     --card-bg: rgba(13, 13, 29, 0.78);
 
-    --border: rgba(255, 255, 255, 0.13);
+    --radius-lg: 26px;
+    --radius-md: 20px;
 
-    --radius-large: 26px;
-    --radius-medium: 20px;
-
-    --nav-height: 92px;
+    --nav-height: 76px;
 }
 
 
-/* =====================================================
+/* =========================================================
    RESET
-===================================================== */
+========================================================= */
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
     -webkit-tap-highlight-color: transparent;
 }
 
+
 html,
 body {
+
     width: 100%;
     min-height: 100%;
 
-    font-family: "Inter", sans-serif;
+    font-family: 'Inter', sans-serif;
 
     background:
         radial-gradient(
-            circle at 50% 45%,
+            circle at 50% 42%,
             rgba(87, 35, 180, 0.16),
             transparent 34%
         ),
@@ -68,14 +74,46 @@ body {
 }
 
 
-/* =====================================================
+body {
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   BUTTON RESET
+========================================================= */
+
+button {
+
+    font-family: inherit;
+
+    -webkit-tap-highlight-color: transparent;
+
+    cursor: pointer;
+
+    border: none;
+
+    outline: none;
+}
+
+
+button:focus,
+button:focus-visible {
+
+    outline: none;
+}
+
+
+/* =========================================================
    APP
-===================================================== */
+========================================================= */
 
 .app {
+
     position: relative;
 
     width: 100%;
+
     max-width: 600px;
 
     min-height: 100vh;
@@ -83,17 +121,17 @@ body {
     margin: auto;
 
     padding:
-        22px
         18px
-        calc(var(--nav-height) + 35px);
+        16px
+        calc(var(--nav-height) + 36px);
 
     overflow: hidden;
 }
 
 
-/* =====================================================
+/* =========================================================
    TOP HEADER
-===================================================== */
+========================================================= */
 
 .top-header {
 
@@ -103,13 +141,15 @@ body {
 
     align-items: flex-start;
 
-    gap: 16px;
+    gap: 12px;
 
     width: 100%;
 }
 
 
-/* USER */
+/* =========================================================
+   USER SECTION
+========================================================= */
 
 .user-section {
 
@@ -117,18 +157,25 @@ body {
 
     align-items: flex-start;
 
-    gap: 15px;
+    gap: 11px;
 
     min-width: 0;
+
+    flex: 1;
 }
 
+
+/* =========================================================
+   AVATAR
+========================================================= */
 
 .avatar-wrapper {
 
     position: relative;
 
-    width: 92px;
-    height: 92px;
+    width: 76px;
+
+    height: 76px;
 
     flex-shrink: 0;
 }
@@ -137,16 +184,24 @@ body {
 .avatar {
 
     width: 100%;
+
     height: 100%;
 
     object-fit: cover;
+
+    object-position: center;
+
+    display: block;
 
     border-radius: 50%;
 
     border: 2px solid transparent;
 
     background:
-        linear-gradient(#050511, #050511) padding-box,
+        linear-gradient(
+            #050511,
+            #050511
+        ) padding-box,
         linear-gradient(
             135deg,
             #7a43ff,
@@ -154,23 +209,58 @@ body {
         ) border-box;
 
     box-shadow:
-        0 0 25px rgba(126, 62, 255, 0.25);
+        0 0 25px
+        rgba(126, 62, 255, 0.25);
+
+    overflow: hidden;
 }
 
+
+/* =========================================================
+   AVATAR FALLBACK
+========================================================= */
+
+.avatar-placeholder {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #17142b,
+            #0a0917
+        );
+
+    color: #aaaabb;
+}
+
+
+/* =========================================================
+   CROWN
+========================================================= */
 
 .crown {
 
     position: absolute;
 
-    top: -10px;
-    right: -10px;
+    top: -7px;
 
-    width: 38px;
-    height: 38px;
+    right: -7px;
+
+    width: 30px;
+
+    height: 30px;
 
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     border-radius: 50%;
@@ -186,94 +276,172 @@ body {
 
     color: #ffd84a;
 
-    font-size: 20px;
+    font-size: 16px;
+
+    line-height: 1;
 
     box-shadow:
-        0 0 18px rgba(139, 61, 255, 0.55);
+        0 0 16px
+        rgba(139, 61, 255, 0.55);
 }
 
 
-/* USER INFO */
+/* =========================================================
+   USER INFO
+========================================================= */
 
 .user-info {
 
-    padding-top: 10px;
+    padding-top: 5px;
 
     min-width: 0;
 }
 
 
-.user-info h1 {
+/* =========================================================
+   USER NAME
+========================================================= */
 
-    font-size: clamp(26px, 6vw, 38px);
+#userName {
 
-    line-height: 1;
+    font-size:
+        clamp(
+            21px,
+            5.2vw,
+            30px
+        );
 
     font-weight: 800;
 
     color: #a65cff;
 
     text-shadow:
-        0 0 18px rgba(139, 61, 255, 0.20);
+        0 0 18px
+        rgba(139, 61, 255, 0.20);
 
     white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    max-width: 145px;
 }
 
 
+/* =========================================================
+   TELEGRAM ID
+   SMALLER BOX
+========================================================= */
+
 .user-id {
 
-    display: flex;
+    display: inline-flex;
 
     align-items: center;
 
-    justify-content: space-between;
+    justify-content: flex-start;
 
-    gap: 10px;
+    gap: 4px;
 
-    margin-top: 12px;
+    margin-top: 7px;
 
-    padding: 9px 11px;
+    padding: 5px 7px;
 
-    border-radius: 16px;
+    width: fit-content;
 
-    border: 1px solid rgba(139, 61, 255, 0.55);
+    max-width: 100%;
+
+    border-radius: 10px;
+
+    border: 1px solid
+        rgba(139, 61, 255, 0.40);
 
     background:
         linear-gradient(
             120deg,
-            rgba(72, 23, 140, 0.35),
-            rgba(10, 10, 24, 0.7)
+            rgba(72, 23, 140, 0.28),
+            rgba(10, 10, 24, 0.68)
         );
 
     color: #a65cff;
 
-    font-size: 13px;
+    font-size: 10px;
 
     font-weight: 600;
+
+    line-height: 1.2;
 
     white-space: nowrap;
 }
 
 
+/* =========================================================
+   COPY BUTTON
+   SMALL + NO BORDER
+========================================================= */
+
 .copy-button {
 
-    border: none;
+    display: inline-flex;
 
-    background: transparent;
+    align-items: center;
+
+    justify-content: center;
+
+    width: 20px;
+
+    height: 20px;
+
+    min-width: 20px;
+
+    min-height: 20px;
+
+    padding: 0;
+
+    margin: 0;
+
+    border: none !important;
+
+    outline: none !important;
+
+    background: transparent !important;
 
     color: #d6d6dd;
 
-    font-size: 21px;
+    font-size: 14px;
 
-    cursor: pointer;
+    line-height: 1;
 
-    padding: 0;
+    border-radius: 5px;
+
+    flex-shrink: 0;
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
 }
 
 
-/* =====================================================
-   BALANCES
-===================================================== */
+.copy-button:hover {
+
+    background:
+        rgba(255, 255, 255, 0.05) !important;
+}
+
+
+.copy-button:active {
+
+    transform: scale(0.90);
+
+    background:
+        rgba(255, 255, 255, 0.07) !important;
+}
+
+
+/* =========================================================
+   BALANCE SECTION
+========================================================= */
 
 .balance-section {
 
@@ -281,84 +449,104 @@ body {
 
     flex-direction: column;
 
-    gap: 11px;
+    gap: 7px;
 
-    width: 175px;
+    width: 142px;
 
     flex-shrink: 0;
 }
 
+
+/* =========================================================
+   BALANCE CARD
+========================================================= */
 
 .balance-card {
 
     width: 100%;
 
-    min-height: 70px;
-
-    padding: 11px;
+    min-height: 55px;
 
     display: flex;
 
     align-items: center;
 
-    gap: 10px;
+    gap: 8px;
 
-    border-radius: 21px;
+    padding: 7px 8px;
 
-    border: 1px solid var(--border);
+    border-radius: 16px;
 
     background:
         linear-gradient(
             145deg,
-            rgba(24, 24, 42, 0.85),
-            rgba(8, 8, 19, 0.85)
+            rgba(20, 20, 42, 0.96),
+            rgba(8, 8, 20, 0.96)
         );
 
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.04),
-        0 10px 35px rgba(0,0,0,0.22);
+    border: 1px solid
+        rgba(255, 255, 255, 0.07);
 
-    color: white;
+    box-shadow:
+        0 8px 20px
+        rgba(0, 0, 0, 0.24);
+
+    color: var(--white);
 
     text-align: left;
 
-    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        border-color 0.15s ease;
 }
 
 
+.balance-card:active {
+
+    transform: scale(0.97);
+}
+
+
+/* =========================================================
+   BALANCE ICON
+========================================================= */
+
 .balance-icon {
 
-    width: 42px;
-    height: 42px;
+    width: 34px;
+
+    height: 34px;
+
+    min-width: 34px;
 
     display: flex;
 
     align-items: center;
-    justify-content: center;
 
-    flex-shrink: 0;
+    justify-content: center;
 
     border-radius: 50%;
 
-    color: white;
+    font-size: 18px;
 
     font-weight: 800;
-
-    font-size: 24px;
 }
 
 
 .usdt-icon {
 
     background:
-        linear-gradient(
-            145deg,
-            #32d7a5,
-            #009f79
+        radial-gradient(
+            circle,
+            #25d9a0,
+            #087d63
         );
 
+    color: white;
+
     box-shadow:
-        0 0 18px rgba(0, 220, 160, 0.35);
+        0 0 12px
+        rgba(38, 224, 167, 0.25);
 }
 
 
@@ -366,18 +554,22 @@ body {
 
     background:
         radial-gradient(
-            circle at 35% 30%,
-            #a875ff,
-            #6b20e8 50%,
-            #341070
+            circle,
+            #9d5cff,
+            #4b18bd
         );
 
-    box-shadow:
-        0 0 22px rgba(132, 54, 255, 0.5);
+    color: white;
 
-    border: 1px solid rgba(211, 178, 255, 0.55);
+    box-shadow:
+        0 0 12px
+        rgba(139, 61, 255, 0.30);
 }
 
+
+/* =========================================================
+   BALANCE CONTENT
+========================================================= */
 
 .balance-content {
 
@@ -385,47 +577,75 @@ body {
 
     flex-direction: column;
 
+    justify-content: center;
+
     min-width: 0;
+
+    flex: 1;
 }
 
 
 .balance-content strong {
 
-    font-size: 17px;
-
-    font-weight: 800;
+    font-size: 14px;
 
     line-height: 1.1;
 
+    font-weight: 700;
+
+    color: #ffffff;
+
     white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
 
 
 .balance-content span {
 
-    margin-top: 3px;
+    margin-top: 2px;
 
-    color: #b5b5c2;
+    font-size: 9px;
 
-    font-size: 12px;
+    line-height: 1;
+
+    font-weight: 600;
+
+    color: #a9a9ba;
 }
 
+
+/* =========================================================
+   BALANCE ARROW
+========================================================= */
 
 .balance-arrow {
 
-    margin-left: auto;
+    color: #85859a;
 
-    color: #c5c5cf;
-
-    font-size: 28px;
+    font-size: 20px;
 
     line-height: 1;
+
+    flex-shrink: 0;
 }
 
 
-/* =====================================================
+/* =========================================================
+   MAIN
+========================================================= */
+
+main {
+
+    width: 100%;
+}
+
+
+/* =========================================================
    HERO
-===================================================== */
+========================================================= */
 
 .hero-section {
 
@@ -433,13 +653,17 @@ body {
 
     width: 100%;
 
-    margin-top: 25px;
+    margin-top: 15px;
 
     display: flex;
 
+    align-items: center;
+
     justify-content: center;
 
-    align-items: center;
+    overflow: hidden;
+
+    border-radius: 25px;
 }
 
 
@@ -447,20 +671,22 @@ body {
 
     position: absolute;
 
-    width: 65%;
-    height: 45%;
+    width: 75%;
 
-    left: 17.5%;
-    top: 35%;
+    height: 70%;
+
+    left: 12.5%;
+
+    top: 15%;
 
     background:
         radial-gradient(
-            ellipse,
-            rgba(111, 38, 255, 0.45),
+            circle,
+            rgba(139, 61, 255, 0.28),
             transparent 68%
         );
 
-    filter: blur(35px);
+    filter: blur(22px);
 
     pointer-events: none;
 }
@@ -470,64 +696,41 @@ body {
 
     position: relative;
 
-    display: block;
+    z-index: 1;
 
     width: 100%;
 
-    max-width: 560px;
+    max-width: 100%;
 
     height: auto;
 
+    display: block;
+
     object-fit: contain;
-
-    image-rendering: auto;
-
-    filter:
-        drop-shadow(
-            0 15px 45px rgba(101, 40, 255, 0.22)
-        );
-
-    z-index: 1;
 }
 
 
-/* =====================================================
-   START EARNING
-===================================================== */
+/* =========================================================
+   START SECTION
+========================================================= */
 
 .start-section {
 
-    margin-top: -18px;
+    width: 100%;
 
-    position: relative;
-
-    z-index: 5;
+    margin-top: 9px;
 }
 
+
+/* =========================================================
+   START BUTTON
+========================================================= */
 
 .start-button {
 
     width: 100%;
 
-    min-height: 84px;
-
-    border: 1px solid rgba(190, 140, 255, 0.65);
-
-    border-radius: 30px;
-
-    background:
-        linear-gradient(
-            105deg,
-            #7022dc 0%,
-            #8d36ff 42%,
-            #344eff 100%
-        );
-
-    color: white;
-
-    font-size: clamp(22px, 5.5vw, 32px);
-
-    font-weight: 800;
+    min-height: 58px;
 
     display: flex;
 
@@ -535,38 +738,104 @@ body {
 
     justify-content: center;
 
-    gap: 15px;
+    gap: 9px;
 
-    cursor: pointer;
+    padding: 12px 18px;
+
+    border-radius: 19px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c31ef,
+            #4c43e8
+        );
+
+    color: #ffffff;
+
+    font-size: 17px;
+
+    font-weight: 800;
 
     box-shadow:
-        0 0 28px rgba(122, 44, 255, 0.42),
-        inset 0 1px 1px rgba(255,255,255,0.28);
+        0 9px 25px
+        rgba(92, 44, 218, 0.34);
 
     transition:
-        transform 0.18s ease,
-        box-shadow 0.18s ease;
+        transform 0.15s ease,
+        opacity 0.15s ease,
+        filter 0.15s ease;
 }
 
 
 .start-button:active {
 
-    transform: scale(0.97);
-
-    box-shadow:
-        0 0 14px rgba(122, 44, 255, 0.3);
+    transform: scale(0.98);
 }
 
+
+.start-button:disabled {
+
+    opacity: 0.75;
+
+    cursor: default;
+}
+
+
+/* =========================================================
+   CLAIM READY
+========================================================= */
+
+.start-button.claim-ready {
+
+    background:
+        linear-gradient(
+            135deg,
+            #8b3dff,
+            #3158ff
+        );
+
+    box-shadow:
+        0 9px 28px
+        rgba(105, 61, 255, 0.40);
+}
+
+
+/* =========================================================
+   ROCKET
+========================================================= */
 
 .rocket {
 
-    font-size: 29px;
+    font-size: 21px;
+
+    line-height: 1;
 }
 
 
-/* =====================================================
+/* =========================================================
+   EARNING STATUS
+========================================================= */
+
+.earning-status {
+
+    min-height: 18px;
+
+    margin-top: 7px;
+
+    text-align: center;
+
+    color: var(--text-soft);
+
+    font-size: 11px;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
    QUICK ACTIONS
-===================================================== */
+========================================================= */
 
 .quick-actions {
 
@@ -575,19 +844,21 @@ body {
     grid-template-columns:
         repeat(3, 1fr);
 
-    gap: 12px;
+    gap: 9px;
 
-    margin-top: 18px;
+    width: 100%;
+
+    margin-top: 13px;
 }
 
 
+/* =========================================================
+   QUICK CARD
+========================================================= */
+
 .quick-card {
 
-    min-height: 142px;
-
-    border-radius: 25px;
-
-    border: 1px solid;
+    min-height: 96px;
 
     display: flex;
 
@@ -597,76 +868,124 @@ body {
 
     justify-content: center;
 
-    gap: 12px;
+    gap: 7px;
+
+    padding: 10px;
+
+    border-radius: 18px;
 
     background:
         linear-gradient(
             145deg,
-            rgba(20, 15, 42, 0.88),
-            rgba(8, 8, 21, 0.95)
+            rgba(20, 20, 42, 0.94),
+            rgba(8, 8, 20, 0.96)
         );
 
-    color: white;
-
-    cursor: pointer;
-
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.04);
+    color: #ffffff;
 
     transition:
-        transform 0.18s ease;
+        transform 0.15s ease,
+        border-color 0.15s ease;
 }
 
 
 .quick-card:active {
 
-    transform: scale(0.95);
+    transform: scale(0.96);
 }
 
+
+.quick-card.daily {
+
+    border: 1px solid
+        rgba(139, 61, 255, 0.38);
+}
+
+
+.quick-card.event {
+
+    border: 1px solid
+        rgba(49, 88, 255, 0.38);
+}
+
+
+.quick-card.shop {
+
+    border: 1px solid
+        rgba(255, 159, 28, 0.38);
+}
+
+
+/* =========================================================
+   QUICK ICON
+========================================================= */
 
 .quick-icon {
 
-    font-size: 38px;
+    width: 42px;
 
-    filter:
-        drop-shadow(
-            0 0 10px rgba(139,61,255,0.45)
-        );
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 13px;
+
+    font-size: 24px;
+
+    background:
+        rgba(255, 255, 255, 0.05);
 }
 
 
-.quick-card span {
+.daily .quick-icon {
 
-    font-size: 19px;
+    color: #a65cff;
 
-    font-weight: 800;
+    background:
+        rgba(139, 61, 255, 0.12);
 }
 
 
-.daily-card {
+.event .quick-icon {
 
-    border-color:
-        rgba(162, 74, 255, 0.75);
+    color: #6b8cff;
+
+    background:
+        rgba(49, 88, 255, 0.12);
 }
 
 
-.event-card {
+.shop .quick-icon {
 
-    border-color:
-        rgba(65, 112, 255, 0.75);
+    color: #ffb347;
+
+    background:
+        rgba(255, 159, 28, 0.12);
 }
 
 
-.shop-card {
+/* =========================================================
+   QUICK LABEL
+========================================================= */
 
-    border-color:
-        rgba(255, 166, 42, 0.8);
+.quick-label {
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #e8e8f2;
 }
 
 
-/* =====================================================
-   BOTTOM NAV
-===================================================== */
+/* =========================================================
+   BOTTOM NAVIGATION
+   SMALLER + NO BORDER
+========================================================= */
 
 .bottom-nav {
 
@@ -674,58 +993,65 @@ body {
 
     left: 50%;
 
-    bottom: 13px;
+    bottom: 9px;
 
     transform: translateX(-50%);
 
     width: calc(100% - 28px);
 
-    max-width: 570px;
+    max-width: 560px;
 
-    height: var(--nav-height);
-
-    padding: 8px;
+    height: 70px;
 
     display: grid;
 
     grid-template-columns:
         repeat(4, 1fr);
 
-    align-items: stretch;
+    align-items: center;
 
-    border-radius: 34px;
-
-    border: 1px solid rgba(255,255,255,0.12);
+    padding: 4px;
 
     background:
         linear-gradient(
             145deg,
-            rgba(19, 19, 35, 0.95),
-            rgba(7, 7, 18, 0.96)
+            rgba(19, 19, 35, 0.96),
+            rgba(7, 7, 18, 0.97)
         );
+
+    /*
+     * IMPORTANT:
+     * No border around navigation.
+     */
+
+    border: none !important;
+
+    outline: none !important;
+
+    border-radius: 24px;
 
     backdrop-filter: blur(20px);
 
     -webkit-backdrop-filter: blur(20px);
 
     box-shadow:
-        0 15px 40px rgba(0,0,0,0.45);
+        0 12px 30px
+        rgba(0, 0, 0, 0.42);
 
     z-index: 100;
 }
 
 
+/* =========================================================
+   NAV ITEMS
+   NO BORDERS
+========================================================= */
+
 .nav-item {
 
     position: relative;
 
-    border: none;
-
-    background: transparent;
-
-    color: #aaaab6;
-
-    border-radius: 24px;
+    height: 60px;
 
     display: flex;
 
@@ -735,53 +1061,83 @@ body {
 
     justify-content: center;
 
-    gap: 3px;
+    gap: 2px;
 
-    font-family: inherit;
+    padding: 4px 0;
 
-    font-size: 12px;
+    background: transparent !important;
+
+    border: none !important;
+
+    outline: none !important;
+
+    box-shadow: none !important;
+
+    border-radius: 16px;
+
+    color: #9999aa;
+
+    font-family: 'Inter', sans-serif;
+
+    font-size: 10px;
 
     font-weight: 600;
 
-    cursor: pointer;
+    line-height: 1;
 
     transition:
-        color 0.2s ease,
-        background 0.2s ease;
+        color 0.18s ease,
+        background 0.18s ease,
+        transform 0.15s ease;
 }
 
+
+.nav-item:focus,
+.nav-item:focus-visible,
+.nav-item:active {
+
+    border: none !important;
+
+    outline: none !important;
+}
+
+
+/* =========================================================
+   NAV ICON
+========================================================= */
 
 .nav-icon {
 
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    width: 40px;
-    height: 34px;
-
-    font-size: 28px;
+    font-size: 20px;
 
     line-height: 1;
+
+    color: inherit;
 }
 
+
+/* =========================================================
+   ACTIVE NAV ITEM
+========================================================= */
 
 .nav-item.active {
 
     color: #a354ff;
 
     background:
-        linear-gradient(
-            145deg,
-            rgba(102, 37, 193, 0.34),
-            rgba(50, 20, 110, 0.15)
-        );
+        rgba(112, 44, 205, 0.13) !important;
 
-    box-shadow:
-        inset 0 0 18px rgba(132, 54, 255, 0.08);
+    border: none !important;
+
+    outline: none !important;
+
+    box-shadow: none !important;
 }
 
+
+/* =========================================================
+   ACTIVE INDICATOR
+========================================================= */
 
 .nav-item.active::after {
 
@@ -789,10 +1145,15 @@ body {
 
     position: absolute;
 
-    bottom: 0;
+    bottom: 3px;
 
-    width: 34px;
-    height: 4px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 25px;
+
+    height: 3px;
 
     border-radius: 10px;
 
@@ -804,167 +1165,78 @@ body {
         );
 
     box-shadow:
-        0 0 10px rgba(139,61,255,0.7);
+        0 0 8px
+        rgba(139, 61, 255, 0.65);
 }
 
 
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+/* =========================================================
+   NAV ACTIVE PRESS
+========================================================= */
 
-@media (max-width: 430px) {
+.nav-item:active {
+
+    transform: scale(0.94);
+}
+
+
+/* =========================================================
+   EARNING COUNTDOWN
+========================================================= */
+
+#earningButtonText {
+
+    display: inline-block;
+
+    min-width: 65px;
+
+    text-align: center;
+
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* =========================================================
+   SMALL MOBILE DEVICES
+========================================================= */
+
+@media (max-width: 380px) {
 
     .app {
 
-        padding-left: 14px;
-        padding-right: 14px;
+        padding-left: 12px;
 
+        padding-right: 12px;
     }
 
 
     .avatar-wrapper {
 
-        width: 76px;
-        height: 76px;
+        width: 68px;
 
+        height: 68px;
     }
 
 
     .crown {
 
-        width: 31px;
-        height: 31px;
+        width: 27px;
 
-        font-size: 16px;
+        height: 27px;
 
+        top: -6px;
+
+        right: -6px;
+
+        font-size: 14px;
     }
 
 
-    .user-info {
-
-        padding-top: 4px;
-
-    }
-
-
-    .user-info h1 {
-
-        font-size: 28px;
-
-    }
-
-
-    .user-id {
-
-        font-size: 11px;
-
-        padding: 8px;
-
-    }
-
-
-    .balance-section {
-
-        width: 150px;
-
-    }
-
-
-    .balance-card {
-
-        min-height: 62px;
-
-        padding: 8px;
-
-    }
-
-
-    .balance-icon {
-
-        width: 36px;
-        height: 36px;
+    #userName {
 
         font-size: 20px;
 
-    }
-
-
-    .balance-content strong {
-
-        font-size: 15px;
-
-    }
-
-
-    .hero-section {
-
-        margin-top: 18px;
-
-    }
-
-
-    .start-button {
-
-        min-height: 76px;
-
-    }
-
-
-    .quick-card {
-
-        min-height: 125px;
-
-        border-radius: 21px;
-
-    }
-
-
-    .quick-icon {
-
-        font-size: 32px;
-
-    }
-
-
-    .quick-card span {
-
-        font-size: 17px;
-
-    }
-
-}
-
-
-/* Very small phones */
-
-@media (max-width: 360px) {
-
-    .top-header {
-
-        gap: 8px;
-
-    }
-
-
-    .balance-section {
-
-        width: 135px;
-
-    }
-
-
-    .avatar-wrapper {
-
-        width: 67px;
-        height: 67px;
-
-    }
-
-
-    .user-info h1 {
-
-        font-size: 24px;
-
+        max-width: 125px;
     }
 
 
@@ -972,27 +1244,193 @@ body {
 
         font-size: 9px;
 
+        padding: 4px 6px;
+
+        gap: 3px;
     }
 
 
-    .quick-actions {
+    .copy-button {
 
-        gap: 7px;
+        width: 18px;
 
+        height: 18px;
+
+        min-width: 18px;
+
+        min-height: 18px;
+
+        font-size: 13px;
+    }
+
+
+    .balance-section {
+
+        width: 132px;
+
+        gap: 6px;
+    }
+
+
+    .balance-card {
+
+        min-height: 51px;
+
+        padding: 6px;
+
+        gap: 6px;
+
+        border-radius: 14px;
+    }
+
+
+    .balance-icon {
+
+        width: 30px;
+
+        height: 30px;
+
+        min-width: 30px;
+
+        font-size: 16px;
+    }
+
+
+    .balance-content strong {
+
+        font-size: 12px;
+    }
+
+
+    .balance-content span {
+
+        font-size: 8px;
+    }
+
+
+    .balance-arrow {
+
+        font-size: 18px;
+    }
+
+
+    .start-button {
+
+        min-height: 55px;
+
+        font-size: 16px;
+
+        border-radius: 17px;
     }
 
 
     .quick-card {
 
-        min-height: 112px;
+        min-height: 88px;
 
+        border-radius: 16px;
     }
 
 
-    .quick-card span {
+    .quick-icon {
 
-        font-size: 15px;
+        width: 38px;
 
+        height: 38px;
+
+        font-size: 21px;
+    }
+
+
+    .quick-label {
+
+        font-size: 11px;
+    }
+
+
+    .bottom-nav {
+
+        width: calc(100% - 20px);
+
+        height: 66px;
+
+        bottom: 7px;
+
+        border-radius: 22px;
+
+        padding: 3px;
+    }
+
+
+    .nav-item {
+
+        height: 58px;
+
+        font-size: 9px;
+
+        border-radius: 14px;
+    }
+
+
+    .nav-icon {
+
+        font-size: 19px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+========================================================= */
+
+@media (max-width: 340px) {
+
+    .user-section {
+
+        gap: 7px;
+    }
+
+
+    .avatar-wrapper {
+
+        width: 62px;
+
+        height: 62px;
+    }
+
+
+    .balance-section {
+
+        width: 124px;
+    }
+
+
+    .balance-card {
+
+        min-height: 48px;
+    }
+
+
+    .bottom-nav {
+
+        width: calc(100% - 16px);
+
+        height: 63px;
+    }
+
+
+    .nav-item {
+
+        height: 55px;
+
+        font-size: 8px;
+    }
+
+
+    .nav-icon {
+
+        font-size: 18px;
     }
 
 }

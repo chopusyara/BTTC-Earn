@@ -2,6 +2,11 @@
    BTTC EARN — TELEGRAM MINI APP
 ========================================= */
 
+
+/* =========================================
+   SUPABASE EDGE FUNCTIONS
+========================================= */
+
 const TELEGRAM_USER_FUNCTION =
     "https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/telegram-user";
 
@@ -12,7 +17,12 @@ const CLAIM_EARNING_FUNCTION =
     "https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/claim-earning";
 
 
-const tg = window.Telegram?.WebApp;
+/* =========================================
+   TELEGRAM
+========================================= */
+
+const tg =
+    window.Telegram?.WebApp || null;
 
 
 /* =========================================
@@ -22,12 +32,18 @@ const tg = window.Telegram?.WebApp;
 if (tg) {
 
     tg.ready();
+
     tg.expand();
 
     try {
 
-        tg.setHeaderColor("#050511");
-        tg.setBackgroundColor("#050511");
+        tg.setHeaderColor(
+            "#050511"
+        );
+
+        tg.setBackgroundColor(
+            "#050511"
+        );
 
     } catch (error) {
 
@@ -45,22 +61,54 @@ if (tg) {
 ========================================= */
 
 const userName =
-    document.getElementById("userName");
+    document.getElementById(
+        "userName"
+    );
 
 const telegramId =
-    document.getElementById("telegramId");
+    document.getElementById(
+        "telegramId"
+    );
+
+const userAvatar =
+    document.getElementById(
+        "userAvatar"
+    );
+
+const avatarFallback =
+    document.getElementById(
+        "avatarFallback"
+    );
 
 const copyButton =
-    document.getElementById("copyId");
-
-const startButton =
-    document.getElementById("startEarning");
+    document.getElementById(
+        "copyId"
+    );
 
 const usdtBalance =
-    document.getElementById("usdtBalance");
+    document.getElementById(
+        "usdtBalance"
+    );
 
 const bttcBalance =
-    document.getElementById("bttcBalance");
+    document.getElementById(
+        "bttcBalance"
+    );
+
+const startButton =
+    document.getElementById(
+        "startEarning"
+    );
+
+const earningButtonText =
+    document.getElementById(
+        "earningButtonText"
+    );
+
+const earningStatus =
+    document.getElementById(
+        "earningStatus"
+    );
 
 
 /* =========================================
@@ -77,11 +125,51 @@ const EARNING_STORAGE_KEY =
     "bttc_earning_session";
 
 
-let currentUser = null;
+let currentUser =
+    null;
 
-let earningTimer = null;
+let earningTimer =
+    null;
 
-let earningSession = null;
+let earningSession =
+    null;
+
+
+/* =========================================
+   BUTTON TEXT
+========================================= */
+
+function setButtonText(text) {
+
+    if (earningButtonText) {
+
+        earningButtonText.textContent =
+            text;
+
+    } else if (startButton) {
+
+        startButton.textContent =
+            text;
+
+    }
+
+}
+
+
+/* =========================================
+   STATUS TEXT
+========================================= */
+
+function setStatus(text) {
+
+    if (earningStatus) {
+
+        earningStatus.textContent =
+            text || "";
+
+    }
+
+}
 
 
 /* =========================================
@@ -90,28 +178,89 @@ let earningSession = null;
 
 function mediumHaptic() {
 
-    if (
-        tg &&
-        tg.HapticFeedback
-    ) {
+    try {
 
-        tg.HapticFeedback
-            .impactOccurred("medium");
+        tg?.HapticFeedback?.impactOccurred(
+            "medium"
+        );
 
-    }
+    } catch (_) {}
 
 }
 
 
 function successHaptic() {
 
+    try {
+
+        tg?.HapticFeedback?.notificationOccurred(
+            "success"
+        );
+
+    } catch (_) {}
+
+}
+
+
+/* =========================================
+   PROFILE PHOTO
+========================================= */
+
+function setProfilePhoto(photoUrl) {
+
+    if (!userAvatar) {
+        return;
+    }
+
+
     if (
-        tg &&
-        tg.HapticFeedback
+        typeof photoUrl === "string" &&
+        photoUrl.trim() !== ""
     ) {
 
-        tg.HapticFeedback
-            .notificationOccurred("success");
+        userAvatar.src =
+            photoUrl;
+
+        userAvatar.style.display =
+            "block";
+
+
+        if (avatarFallback) {
+
+            avatarFallback.style.display =
+                "none";
+
+        }
+
+
+        userAvatar.onerror =
+            function () {
+
+                userAvatar.style.display =
+                    "none";
+
+                if (avatarFallback) {
+
+                    avatarFallback.style.display =
+                        "flex";
+
+                }
+
+            };
+
+        return;
+
+    }
+
+
+    userAvatar.style.display =
+        "none";
+
+
+    if (avatarFallback) {
+
+        avatarFallback.style.display =
+            "flex";
 
     }
 
@@ -119,8 +268,107 @@ function successHaptic() {
 
 
 /* =========================================
-   TELEGRAM USER
-   Securely verified by Supabase
+   DISPLAY USER
+========================================= */
+
+function displayUser(user) {
+
+    if (!user) {
+        return;
+    }
+
+
+    /* NAME */
+
+    if (
+        userName &&
+        user.first_name
+    ) {
+
+        userName.textContent =
+            user.first_name;
+
+    }
+
+
+    /* TELEGRAM ID */
+
+    if (
+        telegramId &&
+        user.telegram_id !== undefined &&
+        user.telegram_id !== null
+    ) {
+
+        telegramId.textContent =
+            user.telegram_id;
+
+    }
+
+
+    /* USDT */
+
+    if (
+        usdtBalance &&
+        user.balance_usdt !== undefined &&
+        user.balance_usdt !== null
+    ) {
+
+        usdtBalance.textContent =
+            Number(
+                user.balance_usdt
+            ).toFixed(2);
+
+    }
+
+
+    /* BTTC */
+
+    if (
+        bttcBalance &&
+        user.balance_bttc !== undefined &&
+        user.balance_bttc !== null
+    ) {
+
+        bttcBalance.textContent =
+            Number(
+                user.balance_bttc
+            ).toLocaleString(
+                "en-IN"
+            );
+
+    }
+
+
+    /*
+     * Prefer backend photo_url.
+     * If backend doesn't return it,
+     * use Telegram Mini App data.
+     */
+
+    let photoUrl =
+        user.photo_url || "";
+
+
+    if (
+        !photoUrl &&
+        tg?.initDataUnsafe?.user?.photo_url
+    ) {
+
+        photoUrl =
+            tg.initDataUnsafe.user.photo_url;
+
+    }
+
+
+    setProfilePhoto(
+        photoUrl
+    );
+
+}
+
+
+/* =========================================
+   LOAD TELEGRAM USER
 ========================================= */
 
 async function loadTelegramUser() {
@@ -128,7 +376,7 @@ async function loadTelegramUser() {
     if (!tg) {
 
         console.log(
-            "Not running inside Telegram."
+            "Telegram WebApp SDK unavailable."
         );
 
         return null;
@@ -143,10 +391,59 @@ async function loadTelegramUser() {
     if (!initData) {
 
         console.log(
-            "Telegram initData not available."
+            "Telegram initData unavailable."
         );
 
+        /*
+         * Acode / normal browser preview
+         * does not provide Telegram initData.
+         */
+
         return null;
+
+    }
+
+
+    /*
+     * Immediately display Telegram profile
+     * information when available.
+     *
+     * This makes the profile image appear
+     * even if the backend user table doesn't
+     * contain photo_url.
+     */
+
+    const telegramPreviewUser =
+        tg.initDataUnsafe?.user;
+
+
+    if (telegramPreviewUser) {
+
+        if (
+            userName &&
+            telegramPreviewUser.first_name
+        ) {
+
+            userName.textContent =
+                telegramPreviewUser.first_name;
+
+        }
+
+
+        if (
+            telegramId &&
+            telegramPreviewUser.id
+        ) {
+
+            telegramId.textContent =
+                telegramPreviewUser.id;
+
+        }
+
+
+        setProfilePhoto(
+            telegramPreviewUser.photo_url
+        );
 
     }
 
@@ -176,13 +473,20 @@ async function loadTelegramUser() {
             await response.json();
 
 
+        console.log(
+            "telegram-user response:",
+            result
+        );
+
+
         if (
             !response.ok ||
-            !result.success
+            !result.success ||
+            !result.user
         ) {
 
             console.error(
-                "Backend error:",
+                "Telegram user backend error:",
                 result
             );
 
@@ -195,66 +499,11 @@ async function loadTelegramUser() {
             result.user;
 
 
-        /* =====================================
-           DISPLAY VERIFIED USER
-        ===================================== */
-
-        if (
-            userName &&
-            user.first_name
-        ) {
-
-            userName.textContent =
-                user.first_name;
-
-        }
+        currentUser =
+            user;
 
 
-        if (
-            telegramId &&
-            user.telegram_id
-        ) {
-
-            telegramId.textContent =
-                user.telegram_id;
-
-        }
-
-
-        /* =====================================
-           DISPLAY BALANCES
-        ===================================== */
-
-        if (
-            usdtBalance &&
-            user.balance_usdt !== undefined
-        ) {
-
-            usdtBalance.textContent =
-                Number(
-                    user.balance_usdt
-                ).toFixed(2);
-
-        }
-
-
-        if (
-            bttcBalance &&
-            user.balance_bttc !== undefined
-        ) {
-
-            bttcBalance.textContent =
-                Number(
-                    user.balance_bttc
-                ).toLocaleString(
-                    "en-IN"
-                );
-
-        }
-
-
-        console.log(
-            "Verified BTTC user:",
+        displayUser(
             user
         );
 
@@ -265,7 +514,7 @@ async function loadTelegramUser() {
     } catch (error) {
 
         console.error(
-            "Backend connection error:",
+            "Telegram user connection error:",
             error
         );
 
@@ -280,40 +529,42 @@ async function loadTelegramUser() {
    UPDATE BTTC BALANCE
 ========================================= */
 
-function updateBTTCBalance(
-    balance
-) {
+function updateBTTCBalance(balance) {
 
     if (!bttcBalance) {
         return;
     }
 
+
     bttcBalance.textContent =
-        Number(balance)
-            .toLocaleString("en-IN");
+        Number(
+            balance
+        ).toLocaleString(
+            "en-IN"
+        );
 
 }
 
 
 /* =========================================
-   SAVE EARNING SESSION LOCALLY
+   LOCAL SESSION STORAGE
 ========================================= */
 
-function saveEarningSession(
-    session
-) {
+function saveEarningSession(session) {
 
     try {
 
         localStorage.setItem(
             EARNING_STORAGE_KEY,
-            JSON.stringify(session)
+            JSON.stringify(
+                session
+            )
         );
 
     } catch (error) {
 
         console.error(
-            "Unable to save earning session:",
+            "Unable to save session:",
             error
         );
 
@@ -322,11 +573,7 @@ function saveEarningSession(
 }
 
 
-/* =========================================
-   LOAD SAVED EARNING SESSION
-========================================= */
-
-function loadSavedEarningSession() {
+function getSavedEarningSession() {
 
     try {
 
@@ -341,13 +588,14 @@ function loadSavedEarningSession() {
         }
 
 
-        return JSON.parse(saved);
-
+        return JSON.parse(
+            saved
+        );
 
     } catch (error) {
 
         console.error(
-            "Unable to load earning session:",
+            "Unable to read saved session:",
             error
         );
 
@@ -358,11 +606,7 @@ function loadSavedEarningSession() {
 }
 
 
-/* =========================================
-   CLEAR SAVED SESSION
-========================================= */
-
-function clearEarningSession() {
+function clearSavedEarningSession() {
 
     try {
 
@@ -373,7 +617,7 @@ function clearEarningSession() {
     } catch (error) {
 
         console.error(
-            "Unable to clear earning session:",
+            "Unable to clear saved session:",
             error
         );
 
@@ -386,60 +630,34 @@ function clearEarningSession() {
    FORMAT TIME
 ========================================= */
 
-function formatTime(
-    totalSeconds
-) {
+function formatTime(seconds) {
 
     const minutes =
         Math.floor(
-            totalSeconds / 60
+            seconds / 60
         );
 
-    const seconds =
-        totalSeconds % 60;
+    const remainingSeconds =
+        seconds % 60;
 
 
     return (
         String(minutes)
             .padStart(2, "0") +
         ":" +
-        String(seconds)
-            .padStart(2, "0")
+        String(
+            remainingSeconds
+        ).padStart(2, "0")
     );
 
 }
 
 
 /* =========================================
-   SET START BUTTON TEXT
+   STOP TIMER
 ========================================= */
 
-function setStartButtonText(
-    text
-) {
-
-    if (!startButton) {
-        return;
-    }
-
-    startButton.textContent =
-        text;
-
-}
-
-
-/* =========================================
-   START COUNTDOWN
-========================================= */
-
-function startCountdown(
-    session
-) {
-
-    if (!startButton) {
-        return;
-    }
-
+function stopTimer() {
 
     if (earningTimer) {
 
@@ -447,7 +665,121 @@ function startCountdown(
             earningTimer
         );
 
-        earningTimer = null;
+        earningTimer =
+            null;
+
+    }
+
+}
+
+
+/* =========================================
+   CLAIM MODE
+========================================= */
+
+function setClaimMode(enabled) {
+
+    if (!startButton) {
+        return;
+    }
+
+
+    startButton.dataset.mode =
+        enabled
+            ? "claim"
+            : "start";
+
+}
+
+
+/* =========================================
+   SHOW CLAIM BUTTON
+========================================= */
+
+function showClaimButton() {
+
+    stopTimer();
+
+    setClaimMode(
+        true
+    );
+
+
+    setButtonText(
+        "CLAIM 1,000 BTTC"
+    );
+
+
+    if (startButton) {
+
+        startButton.disabled =
+            false;
+
+        startButton.classList.add(
+            "claim-ready"
+        );
+
+    }
+
+
+    setStatus(
+        "Your 1,000 BTTC reward is ready."
+    );
+
+}
+
+
+/* =========================================
+   SHOW START BUTTON
+========================================= */
+
+function showStartButton() {
+
+    stopTimer();
+
+    setClaimMode(
+        false
+    );
+
+
+    setButtonText(
+        "Start Earning"
+    );
+
+
+    if (startButton) {
+
+        startButton.disabled =
+            false;
+
+        startButton.classList.remove(
+            "claim-ready"
+        );
+
+    }
+
+
+    setStatus(
+        ""
+    );
+
+}
+
+
+/* =========================================
+   COUNTDOWN
+========================================= */
+
+function startCountdown(session) {
+
+    if (
+        !session ||
+        !session.ends_at
+    ) {
+
+        showStartButton();
+
+        return;
 
     }
 
@@ -461,73 +793,18 @@ function startCountdown(
     );
 
 
-    function updateTimer() {
-
-        const now =
-            Date.now();
-
-        const endTime =
-            new Date(
-                session.ends_at
-            ).getTime();
+    stopTimer();
 
 
-        const remainingSeconds =
-            Math.max(
-                0,
-                Math.ceil(
-                    (endTime - now) /
-                    1000
-                )
-            );
+    setClaimMode(
+        false
+    );
 
 
-        if (
-            remainingSeconds <= 0
-        ) {
-
-            clearInterval(
-                earningTimer
-            );
-
-            earningTimer =
-                null;
-
-
-            setStartButtonText(
-                "CLAIM 1,000 BTTC"
-            );
-
-
-            startButton.disabled =
-                false;
-
-
-            startButton.classList.add(
-                "claim-ready"
-            );
-
-
-            console.log(
-                "Earning session completed."
-            );
-
-
-            return;
-
-        }
-
-
-        setStartButtonText(
-            formatTime(
-                remainingSeconds
-            )
-        );
-
+    if (startButton) {
 
         startButton.disabled =
             true;
-
 
         startButton.classList.remove(
             "claim-ready"
@@ -536,12 +813,61 @@ function startCountdown(
     }
 
 
-    updateTimer();
+    function update() {
+
+        const endTime =
+            new Date(
+                session.ends_at
+            ).getTime();
+
+
+        const now =
+            Date.now();
+
+
+        const remaining =
+            Math.max(
+                0,
+                Math.ceil(
+                    (
+                        endTime -
+                        now
+                    ) / 1000
+                )
+            );
+
+
+        if (
+            remaining <= 0
+        ) {
+
+            showClaimButton();
+
+            return;
+
+        }
+
+
+        setButtonText(
+            formatTime(
+                remaining
+            )
+        );
+
+
+        setStatus(
+            "Earning in progress..."
+        );
+
+    }
+
+
+    update();
 
 
     earningTimer =
         setInterval(
-            updateTimer,
+            update,
             1000
         );
 
@@ -549,7 +875,7 @@ function startCountdown(
 
 
 /* =========================================
-   START EARNING SESSION
+   START EARNING
 ========================================= */
 
 async function startEarning() {
@@ -558,17 +884,6 @@ async function startEarning() {
 
         alert(
             "Please open BTTC Earn inside Telegram."
-        );
-
-        return;
-
-    }
-
-
-    if (!currentUser) {
-
-        alert(
-            "User verification is still loading. Please try again."
         );
 
         return;
@@ -587,16 +902,41 @@ async function startEarning() {
     }
 
 
+    if (!currentUser) {
+
+        alert(
+            "Please wait for your Telegram account to load."
+        );
+
+        return;
+
+    }
+
+
     mediumHaptic();
 
 
-    setStartButtonText(
-        "STARTING..."
+    if (startButton) {
+
+        startButton.disabled =
+            true;
+
+    }
+
+
+    setClaimMode(
+        false
     );
 
 
-    startButton.disabled =
-        true;
+    setButtonText(
+        "Starting..."
+    );
+
+
+    setStatus(
+        "Starting your 15-minute earning session..."
+    );
 
 
     try {
@@ -625,14 +965,15 @@ async function startEarning() {
 
 
         console.log(
-            "Start earning response:",
+            "start-earning response:",
             result
         );
 
 
         if (
             !response.ok ||
-            !result.success
+            !result.success ||
+            !result.session
         ) {
 
             throw new Error(
@@ -643,19 +984,13 @@ async function startEarning() {
         }
 
 
-        const session =
-            result.session;
-
-
         /*
-         * The backend may tell us that
-         * a session was already active.
-         *
-         * In that case we simply resume it.
+         * Server controls the session
+         * start/end time.
          */
 
         startCountdown(
-            session
+            result.session
         );
 
 
@@ -667,13 +1002,7 @@ async function startEarning() {
         );
 
 
-        startButton.disabled =
-            false;
-
-
-        setStartButtonText(
-            "START EARNING"
-        );
+        showStartButton();
 
 
         alert(
@@ -687,7 +1016,7 @@ async function startEarning() {
 
 
 /* =========================================
-   CLAIM 1,000 BTTC
+   CLAIM EARNING
 ========================================= */
 
 async function claimEarning() {
@@ -717,13 +1046,22 @@ async function claimEarning() {
     mediumHaptic();
 
 
-    setStartButtonText(
-        "CLAIMING..."
+    if (startButton) {
+
+        startButton.disabled =
+            true;
+
+    }
+
+
+    setButtonText(
+        "Claiming..."
     );
 
 
-    startButton.disabled =
-        true;
+    setStatus(
+        "Checking your earning session..."
+    );
 
 
     try {
@@ -752,7 +1090,7 @@ async function claimEarning() {
 
 
         console.log(
-            "Claim response:",
+            "claim-earning response:",
             result
         );
 
@@ -771,16 +1109,24 @@ async function claimEarning() {
 
 
         /*
-         * The backend returns the
-         * authoritative new balance.
+         * Backend is authoritative.
          */
 
-        updateBTTCBalance(
-            result.new_balance_bttc
-        );
+        if (
+            result.new_balance_bttc !==
+            undefined &&
+            result.new_balance_bttc !==
+            null
+        ) {
+
+            updateBTTCBalance(
+                result.new_balance_bttc
+            );
+
+        }
 
 
-        clearEarningSession();
+        clearSavedEarningSession();
 
 
         earningSession =
@@ -791,56 +1137,61 @@ async function claimEarning() {
 
 
         /*
-         * The cycle is now completely finished.
+         * IMPORTANT:
          *
-         * The user MUST press START EARNING
-         * again to begin another 15-minute session.
+         * We do NOT automatically
+         * start another session.
+         *
+         * User must tap Start Earning
+         * again.
          */
 
-        setStartButtonText(
-            "START EARNING"
-        );
+        showStartButton();
 
 
-        startButton.disabled =
-            false;
-
-
-        startButton.classList.remove(
-            "claim-ready"
-        );
-
-
-        console.log(
-            `Reward claimed: ${result.reward_bttc} BTTC`
+        setStatus(
+            "+1,000 BTTC added to your balance."
         );
 
 
     } catch (error) {
 
         console.error(
-            "Claim earning error:",
+            "Claim error:",
             error
         );
 
 
         /*
-         * If the local timer finished slightly
-         * before the server's exact 15 minutes,
-         * allow the user to try the claim again.
+         * Allow retry if the server
+         * timestamp was only slightly
+         * ahead of the browser timer.
          */
 
-        setStartButtonText(
+        setClaimMode(
+            true
+        );
+
+
+        setButtonText(
             "CLAIM 1,000 BTTC"
         );
 
 
-        startButton.disabled =
-            false;
+        if (startButton) {
+
+            startButton.disabled =
+                false;
+
+            startButton.classList.add(
+                "claim-ready"
+            );
+
+        }
 
 
-        startButton.classList.add(
-            "claim-ready"
+        setStatus(
+            ""
         );
 
 
@@ -862,16 +1213,16 @@ if (startButton) {
 
     startButton.addEventListener(
         "click",
-        async () => {
+        async function () {
 
             /*
-             * If the button says CLAIM,
-             * perform the claim operation.
+             * If timer has finished,
+             * button is in CLAIM mode.
              */
 
             if (
-                startButton.textContent
-                    .includes("CLAIM")
+                startButton.dataset.mode ===
+                "claim"
             ) {
 
                 await claimEarning();
@@ -882,8 +1233,31 @@ if (startButton) {
 
 
             /*
-             * Otherwise start a new
-             * 15-minute earning session.
+             * Extra protection:
+             * check visible button text.
+             */
+
+            const text =
+                (
+                    earningButtonText?.textContent ||
+                    startButton.textContent ||
+                    ""
+                ).toUpperCase();
+
+
+            if (
+                text.includes("CLAIM")
+            ) {
+
+                await claimEarning();
+
+                return;
+
+            }
+
+
+            /*
+             * Normal START mode.
              */
 
             await startEarning();
@@ -895,26 +1269,21 @@ if (startButton) {
 
 
 /* =========================================
-   RESTORE SESSION AFTER RELOAD
+   RESTORE SAVED SESSION
 ========================================= */
 
 function restoreEarningSession() {
 
     const savedSession =
-        loadSavedEarningSession();
-
-
-    if (!savedSession) {
-        return;
-    }
+        getSavedEarningSession();
 
 
     if (
-        savedSession.status !==
-        "active"
+        !savedSession ||
+        !savedSession.ends_at
     ) {
 
-        clearEarningSession();
+        showStartButton();
 
         return;
 
@@ -931,46 +1300,28 @@ function restoreEarningSession() {
         Number.isNaN(endTime)
     ) {
 
-        clearEarningSession();
+        clearSavedEarningSession();
+
+        showStartButton();
 
         return;
 
     }
 
 
-    const remaining =
-        endTime -
-        Date.now();
-
-
     /*
-     * The local timer says the session
-     * has completed.
-     *
-     * We show Claim, but the backend
-     * still performs the real 15-minute
-     * verification.
+     * If the saved session has already
+     * finished, show Claim immediately.
      */
 
-    if (remaining <= 0) {
-
-        setStartButtonText(
-            "CLAIM 1,000 BTTC"
-        );
-
-
-        startButton.disabled =
-            false;
-
-
-        startButton.classList.add(
-            "claim-ready"
-        );
-
+    if (
+        endTime <= Date.now()
+    ) {
 
         earningSession =
             savedSession;
 
+        showClaimButton();
 
         return;
 
@@ -978,10 +1329,9 @@ function restoreEarningSession() {
 
 
     /*
-     * Session is still running.
+     * Otherwise continue countdown.
      */
-
-    startCountdown(
+     startCountdown(
         savedSession
     );
 
@@ -996,28 +1346,41 @@ if (copyButton) {
 
     copyButton.addEventListener(
         "click",
-        async () => {
+        async function () {
 
             const id =
-                telegramId?.textContent
-                    ?.trim();
+                telegramId?.textContent?.trim();
 
 
-            if (!id) {
+            if (
+                !id ||
+                id === "XXXXXXXXXX"
+            ) {
+
                 return;
+
             }
 
 
             try {
 
-                await navigator
-                    .clipboard
-                    .writeText(id);
+                await navigator.clipboard.writeText(
+                    id
+                );
+
+
+                try {
+
+                    tg?.HapticFeedback
+                        ?.notificationOccurred(
+                            "success"
+                        );
+
+                } catch (_) {}
 
 
                 if (
-                    tg &&
-                    tg.showPopup
+                    tg?.showPopup
                 ) {
 
                     tg.showPopup({
@@ -1030,8 +1393,7 @@ if (copyButton) {
 
                         buttons: [
                             {
-                                type:
-                                    "ok"
+                                type: "ok"
                             }
                         ]
 
@@ -1040,7 +1402,7 @@ if (copyButton) {
                 } else {
 
                     alert(
-                        "ID copied!"
+                        "Telegram ID copied successfully."
                     );
 
                 }
@@ -1049,9 +1411,56 @@ if (copyButton) {
             } catch (error) {
 
                 console.error(
-                    "Copy error:",
+                    "Copy ID error:",
                     error
                 );
+
+
+                /*
+                 * Clipboard fallback.
+                 */
+
+                try {
+
+                    const textarea =
+                        document.createElement(
+                            "textarea"
+                        );
+
+                    textarea.value =
+                        id;
+
+                    textarea.style.position =
+                        "fixed";
+
+                    textarea.style.opacity =
+                        "0";
+
+                    document.body.appendChild(
+                        textarea
+                    );
+
+                    textarea.select();
+
+                    document.execCommand(
+                        "copy"
+                    );
+
+                    textarea.remove();
+
+
+                    alert(
+                        "Telegram ID copied successfully."
+                    );
+
+
+                } catch (_) {
+
+                    alert(
+                        "Unable to copy Telegram ID."
+                    );
+
+                }
 
             }
 
@@ -1062,7 +1471,7 @@ if (copyButton) {
 
 
 /* =========================================
-   QUICK BUTTONS
+   QUICK ACTIONS
 ========================================= */
 
 const quickButtons =
@@ -1072,25 +1481,22 @@ const quickButtons =
 
 
 quickButtons.forEach(
-    button => {
+    function (button) {
 
         button.addEventListener(
             "click",
-            () => {
+            function () {
 
                 const page =
                     button.dataset.page;
 
 
-                if (
-                    tg &&
-                    tg.HapticFeedback
-                ) {
+                try {
 
-                    tg.HapticFeedback
-                        .selectionChanged();
+                    tg?.HapticFeedback
+                        ?.selectionChanged();
 
-                }
+                } catch (_) {}
 
 
                 console.log(
@@ -1116,18 +1522,18 @@ const navItems =
 
 
 navItems.forEach(
-    item => {
+    function (item) {
 
         item.addEventListener(
             "click",
-            () => {
+            function () {
 
                 const page =
                     item.dataset.page;
 
 
                 navItems.forEach(
-                    nav => {
+                    function (nav) {
 
                         nav.classList.remove(
                             "active"
@@ -1142,15 +1548,12 @@ navItems.forEach(
                 );
 
 
-                if (
-                    tg &&
-                    tg.HapticFeedback
-                ) {
+                try {
 
-                    tg.HapticFeedback
-                        .selectionChanged();
+                    tg?.HapticFeedback
+                        ?.selectionChanged();
 
-                }
+                } catch (_) {}
 
 
                 console.log(
@@ -1166,7 +1569,7 @@ navItems.forEach(
 
 
 /* =========================================
-   PREVENT DOUBLE TAP ZOOM
+   PREVENT DOUBLE-TAP ZOOM
 ========================================= */
 
 let lastTouchEnd =
@@ -1175,7 +1578,7 @@ let lastTouchEnd =
 
 document.addEventListener(
     "touchend",
-    event => {
+    function (event) {
 
         const now =
             Date.now();
@@ -1202,32 +1605,30 @@ document.addEventListener(
    START APP
 ========================================= */
 
-(async () => {
+(async function () {
+
+    /*
+     * Load verified Telegram user
+     * and backend balances.
+     */
 
     currentUser =
         await loadTelegramUser();
 
 
-    if (currentUser) {
+    /*
+     * Restore an active 15-minute
+     * earning session after reload.
+     */
 
-        /*
-         * Only restore a session here.
-         *
-         * We DO NOT call start-earning
-         * automatically because the user
-         * must explicitly press START.
-         */
-
-        if (startButton) {
-
-            restoreEarningSession();
-
-        }
-
-    }
+    restoreEarningSession();
 
 })();
 
+
+/* =========================================
+   READY
+========================================= */
 
 console.log(
     "BTTC Earn loaded successfully."
