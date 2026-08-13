@@ -820,7 +820,7 @@ function setStartButtonLoading(
 
   if (loading) {
     setButtonText(
-      "PLEASE WAIT..."
+      "Mining"
     );
   } else {
     updateEarningButton();
@@ -920,7 +920,7 @@ function updateEarningButton() {
   }
 
   setButtonText(
-    `EARNING ${formatTime(
+    `${formatTime(
       remaining
     )}`
   );
@@ -969,7 +969,7 @@ function startEarningTimer() {
       updateEarningButton();
 
       showEarningStatus(
-        "Your earning is ready to claim."
+        "Your Reward is ready to claim."
       );
 
       return;
