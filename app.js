@@ -794,7 +794,7 @@ function handleEarningButton() {
     }
 
     showEarningStatus(
-      "Earning is already running."
+      "Mining BTTC "
     );
 
     return;
