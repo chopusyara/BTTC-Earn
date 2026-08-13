@@ -1,197 +1,192 @@
-/* =========================================
+/* =========================================================
    BTTC EARN — TELEGRAM MINI APP
-========================================= */
+   COMPLETE APP.JS REPLACEMENT
+
+   Fixes:
+   - Start Earning works reliably in Telegram
+   - Does not wait unnecessarily for currentUser
+   - Telegram initData is used for secure server calls
+   - Claim flow preserved
+   - Mining session restored after reload
+   - Copy Telegram ID
+   - Telegram profile display
+   - Referral processing preserved
+   - Bottom navigation preserved
+   - Quick buttons preserved
+========================================================= */
 
 
-/* =========================================
+/* =========================================================
    SUPABASE EDGE FUNCTIONS
-========================================= */
+========================================================= */
 
 const TELEGRAM_USER_FUNCTION =
 "https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/telegram-user";
 
-const START_Mining_FUNCTION =
-"https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/start-Mining";
+const START_EARNING_FUNCTION =
+"https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/start-earning";
 
-const CLAIM_Mining_FUNCTION =
-"https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/claim-Mining";
+const CLAIM_EARNING_FUNCTION =
+"https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/claim-earning";
 
 const PROCESS_REFERRAL_FUNCTION =
 "https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/process-referral";
 
 
-/* =========================================
+/* =========================================================
    TELEGRAM
-========================================= */
+========================================================= */
 
 const tg =
 window.Telegram?.WebApp || null;
 
 
-/* =========================================
+/* =========================================================
    TELEGRAM INITIALIZATION
-========================================= */
+========================================================= */
 
 if (tg) {
 
   try {
-
     tg.ready();
+  } catch (_) {}
 
+  try {
     tg.expand();
+  } catch (_) {}
 
-    tg.setHeaderColor(
-      "#050511"
-    );
+  try {
+    tg.setHeaderColor("#050511");
+  } catch (_) {}
 
-    tg.setBackgroundColor(
-      "#050511"
-    );
-
-  } catch (error) {
-
-    console.log(
-      "Telegram initialization error:",
-      error
-    );
-
-  }
+  try {
+    tg.setBackgroundColor("#050511");
+  } catch (_) {}
 
 }
 
 
-/* =========================================
-   ELEMENTS
-========================================= */
+/* =========================================================
+   DOM ELEMENTS
+========================================================= */
 
 const userName =
-document.getElementById(
-  "userName"
-);
-
+document.getElementById("userName");
 
 const telegramId =
-document.getElementById(
-  "telegramId"
-);
-
+document.getElementById("telegramId");
 
 const userAvatar =
-document.getElementById(
-  "userAvatar"
-);
-
+document.getElementById("userAvatar");
 
 const avatarFallback =
-document.getElementById(
-  "avatarFallback"
-);
-
+document.getElementById("avatarFallback");
 
 const copyButton =
-document.getElementById(
-  "copyId"
-);
-
+document.getElementById("copyId");
 
 const usdtBalance =
-document.getElementById(
-  "usdtBalance"
-);
-
+document.getElementById("usdtBalance");
 
 const bttcBalance =
-document.getElementById(
-  "bttcBalance"
-);
-
+document.getElementById("bttcBalance");
 
 const startButton =
-document.getElementById(
-  "startMining"
-);
+document.getElementById("startEarning");
+
+const earningButtonText =
+document.getElementById("earningButtonText");
+
+const earningStatus =
+document.getElementById("earningStatus");
 
 
-const MiningButtonText =
-document.getElementById(
-  "MiningButtonText"
-);
+/* =========================================================
+   EARNING SETTINGS
+========================================================= */
 
-
-const MiningStatus =
-document.getElementById(
-  "MiningStatus"
-);
-
-
-/* =========================================
-   Mining SETTINGS
-========================================= */
-
-const Mining_DURATION_SECONDS =
+const EARNING_DURATION_SECONDS =
 15 * 60;
 
-
-const Mining_REWARD =
+const EARNING_REWARD =
 1000;
 
-
-const Mining_STORAGE_KEY =
-"bttc_Mining_session";
+const EARNING_STORAGE_KEY =
+"bttc_earning_session";
 
 
 let currentUser =
 null;
 
-
-let MiningTimer =
+let earningTimer =
 null;
 
-
-let MiningSession =
+let earningSession =
 null;
 
+let startRequestRunning =
+false;
 
-/* =========================================
+let claimRequestRunning =
+false;
+
+
+/* =========================================================
    BUTTON TEXT
-========================================= */
+========================================================= */
 
-function setButtonText(
-  text
-) {
+function setButtonText(text) {
 
-  if (
-    MiningButtonText
-  ) {
+  if (earningButtonText) {
 
-    MiningButtonText.textContent =
+    earningButtonText.textContent =
     text;
 
-  } else if (
-    startButton
-  ) {
+    return;
+  }
 
-    startButton.textContent =
-    text;
+  if (startButton) {
+
+    /*
+     * Preserve the rocket/icon if
+     * there is no separate text span.
+     */
+
+    const textNode =
+    Array.from(
+      startButton.childNodes
+    ).find(
+      node =>
+      node.nodeType ===
+      Node.TEXT_NODE
+    );
+
+    if (textNode) {
+
+      textNode.textContent =
+      " " + text;
+
+    } else {
+
+      startButton.textContent =
+      text;
+
+    }
 
   }
 
 }
 
 
-/* =========================================
-   STATUS TEXT
-========================================= */
+/* =========================================================
+   STATUS
+========================================================= */
 
-function setStatus(
-  text
-) {
+function setStatus(text) {
 
-  if (
-    MiningStatus
-  ) {
+  if (earningStatus) {
 
-    MiningStatus.textContent =
+    earningStatus.textContent =
     text || "";
 
   }
@@ -199,9 +194,9 @@ function setStatus(
 }
 
 
-/* =========================================
-   HAPTIC
-========================================= */
+/* =========================================================
+   HAPTIC HELPERS
+========================================================= */
 
 function mediumHaptic() {
 
@@ -210,6 +205,20 @@ function mediumHaptic() {
     tg?.HapticFeedback
     ?.impactOccurred(
       "medium"
+    );
+
+  } catch (_) {}
+
+}
+
+
+function lightHaptic() {
+
+  try {
+
+    tg?.HapticFeedback
+    ?.impactOccurred(
+      "light"
     );
 
   } catch (_) {}
@@ -231,26 +240,64 @@ function successHaptic() {
 }
 
 
-/* =========================================
+function errorHaptic() {
+
+  try {
+
+    tg?.HapticFeedback
+    ?.notificationOccurred(
+      "error"
+    );
+
+  } catch (_) {}
+
+}
+
+
+/* =========================================================
+   TELEGRAM ALERT
+========================================================= */
+
+function showTelegramAlert(message) {
+
+  try {
+
+    if (
+      tg?.showAlert
+    ) {
+
+      tg.showAlert(
+        String(message)
+      );
+
+      return;
+
+    }
+
+  } catch (_) {}
+
+  alert(
+    String(message)
+  );
+
+}
+
+
+/* =========================================================
    PROFILE PHOTO
-========================================= */
+========================================================= */
 
 function setProfilePhoto(
   photoUrl
 ) {
 
-  if (
-    !userAvatar
-  ) {
-
+  if (!userAvatar) {
     return;
-
   }
 
 
   if (
-    typeof photoUrl ===
-    "string" &&
+    typeof photoUrl === "string" &&
     photoUrl.trim() !== ""
   ) {
 
@@ -261,9 +308,7 @@ function setProfilePhoto(
     "block";
 
 
-    if (
-      avatarFallback
-    ) {
+    if (avatarFallback) {
 
       avatarFallback.style.display =
       "none";
@@ -278,9 +323,7 @@ function setProfilePhoto(
       "none";
 
 
-      if (
-        avatarFallback
-      ) {
+      if (avatarFallback) {
 
         avatarFallback.style.display =
         "flex";
@@ -299,9 +342,7 @@ function setProfilePhoto(
   "none";
 
 
-  if (
-    avatarFallback
-  ) {
+  if (avatarFallback) {
 
     avatarFallback.style.display =
     "flex";
@@ -311,24 +352,18 @@ function setProfilePhoto(
 }
 
 
-/* =========================================
+/* =========================================================
    DISPLAY USER
-========================================= */
+========================================================= */
 
 function displayUser(
   user
 ) {
 
-  if (
-    !user
-  ) {
-
+  if (!user) {
     return;
-
   }
 
-
-  /* NAME */
 
   if (
     userName &&
@@ -341,161 +376,136 @@ function displayUser(
   }
 
 
-  /* TELEGRAM ID */
-
   if (
     telegramId &&
-    user.telegram_id !==
-    undefined &&
-    user.telegram_id !==
-    null
+    user.id
   ) {
 
     telegramId.textContent =
-    user.telegram_id;
-
-  }
-
-
-  /* USDT BALANCE */
-
-  if (
-    usdtBalance &&
-    user.balance_usdt !==
-    undefined &&
-    user.balance_usdt !==
-    null
-  ) {
-
-    usdtBalance.textContent =
-    Number(
-      user.balance_usdt
-    ).toFixed(2);
-
-  }
-
-
-  /* BTTC BALANCE */
-
-  if (
-    bttcBalance &&
-    user.balance_bttc !==
-    undefined &&
-    user.balance_bttc !==
-    null
-  ) {
-
-    bttcBalance.textContent =
-    Number(
-      user.balance_bttc
-    ).toLocaleString(
-      "en-IN"
-    );
-
-  }
-
-
-  /*
-   * Prefer backend photo_url.
-   * Fall back to Telegram photo_url.
-   */
-
-  let photoUrl =
-  user.photo_url || "";
-
-
-  if (
-    !photoUrl &&
-    tg?.initDataUnsafe?.user?.photo_url
-  ) {
-
-    photoUrl =
-    tg.initDataUnsafe
-    .user
-    .photo_url;
+    user.id;
 
   }
 
 
   setProfilePhoto(
-    photoUrl
+    user.photo_url
   );
 
 }
 
 
-/* =========================================
-   LOAD TELEGRAM USER
-========================================= */
+/* =========================================================
+   UPDATE BTTC BALANCE
+========================================================= */
 
-async function loadTelegramUser() {
+function updateBTTCBalance(
+  balance
+) {
+
+  if (!bttcBalance) {
+    return;
+  }
+
+
+  const numericBalance =
+  Number(balance);
+
 
   if (
-    !tg
+    !Number.isFinite(
+      numericBalance
+    )
   ) {
 
-    console.log(
-      "Telegram WebApp SDK unavailable."
-    );
-
-    return null;
+    return;
 
   }
 
 
-  const initData =
-  tg.initData;
+  bttcBalance.textContent =
+  numericBalance.toLocaleString(
+    "en-IN"
+  );
+
+}
+
+
+/* =========================================================
+   UPDATE USDT BALANCE
+========================================================= */
+
+function updateUSDTBalance(
+  balance
+) {
+
+  if (!usdtBalance) {
+    return;
+  }
+
+
+  const numericBalance =
+  Number(balance);
 
 
   if (
-    !initData
+    !Number.isFinite(
+      numericBalance
+    )
   ) {
 
-    console.log(
-      "Telegram initData unavailable."
-    );
+    return;
 
-    return null;
+  }
+
+
+  usdtBalance.textContent =
+  numericBalance.toFixed(2);
+
+}
+
+
+/* =========================================================
+   LOAD TELEGRAM USER
+========================================================= */
+
+async function loadTelegramUser() {
+
+  /*
+   * Telegram client data is immediately
+   * available inside the Mini App.
+   */
+
+  const telegramClientUser =
+  tg?.initDataUnsafe?.user;
+
+
+  if (
+    telegramClientUser
+  ) {
+
+    displayUser(
+      telegramClientUser
+    );
 
   }
 
 
   /*
-   * Show Telegram information immediately.
+   * Secure server request.
    */
 
-  const telegramPreviewUser =
-  tg.initDataUnsafe?.user;
-
-
   if (
-    telegramPreviewUser
+    !tg ||
+    !tg.initData
   ) {
 
-    if (
-      userName &&
-      telegramPreviewUser.first_name
-    ) {
+    console.warn(
+      "Telegram initData unavailable."
+    );
 
-      userName.textContent =
-      telegramPreviewUser.first_name;
-
-    }
-
-
-    if (
-      telegramId &&
-      telegramPreviewUser.id
-    ) {
-
-      telegramId.textContent =
-      telegramPreviewUser.id;
-
-    }
-
-
-    setProfilePhoto(
-      telegramPreviewUser.photo_url
+    return (
+      telegramClientUser ||
+      null
     );
 
   }
@@ -507,20 +517,19 @@ async function loadTelegramUser() {
     await fetch(
       TELEGRAM_USER_FUNCTION,
       {
-        method: "POST",
+        method:
+        "POST",
 
         headers: {
           "Content-Type":
           "application/json"
         },
 
-        body: JSON.stringify({
-
+        body:
+        JSON.stringify({
           initData:
-          initData
-
+          tg.initData
         })
-
       }
     );
 
@@ -537,777 +546,117 @@ async function loadTelegramUser() {
 
     if (
       !response.ok ||
-      !result.success ||
-      !result.user
-    ) {
-
-      console.error(
-        "Telegram user backend error:",
-        result
-      );
-
-      return null;
-
-    }
-
-
-    const user =
-    result.user;
-
-
-    currentUser =
-    user;
-
-
-    displayUser(
-      user
-    );
-
-
-    return user;
-
-
-  } catch (
-    error
-  ) {
-
-    console.error(
-      "Telegram user connection error:",
-      error
-    );
-
-    return null;
-
-  }
-
-}
-
-
-/* =========================================
-   UPDATE BTTC BALANCE
-========================================= */
-
-function updateBTTCBalance(
-  balance
-) {
-
-  if (
-    !bttcBalance
-  ) {
-
-    return;
-
-  }
-
-
-  bttcBalance.textContent =
-  Number(
-    balance
-  ).toLocaleString(
-    "en-IN"
-  );
-
-}
-
-
-/* =========================================
-   LOCAL Mining SESSION
-========================================= */
-
-function saveMiningSession(
-  session
-) {
-
-  try {
-
-    localStorage.setItem(
-      Mining_STORAGE_KEY,
-      JSON.stringify(
-        session
-      )
-    );
-
-  } catch (
-    error
-  ) {
-
-    console.error(
-      "Unable to save Mining session:",
-      error
-    );
-
-  }
-
-}
-
-
-function getSavedMiningSession() {
-
-  try {
-
-    const saved =
-    localStorage.getItem(
-      Mining_STORAGE_KEY
-    );
-
-
-    if (
-      !saved
-    ) {
-
-      return null;
-
-    }
-
-
-    return JSON.parse(
-      saved
-    );
-
-
-  } catch (
-    error
-  ) {
-
-    console.error(
-      "Unable to read Mining session:",
-      error
-    );
-
-    return null;
-
-  }
-
-}
-
-
-function clearSavedMiningSession() {
-
-  try {
-
-    localStorage.removeItem(
-      Mining_STORAGE_KEY
-    );
-
-  } catch (
-    error
-  ) {
-
-    console.error(
-      "Unable to clear Mining session:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================
-   FORMAT TIME
-========================================= */
-
-function formatTime(
-  seconds
-) {
-
-  const minutes =
-  Math.floor(
-    seconds / 60
-  );
-
-
-  const remainingSeconds =
-  seconds % 60;
-
-
-  return (
-    String(
-      minutes
-    ).padStart(
-      2,
-      "0"
-    ) +
-    ":" +
-    String(
-      remainingSeconds
-    ).padStart(
-      2,
-      "0"
-    )
-  );
-
-}
-
-
-/* =========================================
-   STOP TIMER
-========================================= */
-
-function stopTimer() {
-
-  if (
-    MiningTimer
-  ) {
-
-    clearInterval(
-      MiningTimer
-    );
-
-    MiningTimer =
-    null;
-
-  }
-
-}
-
-
-/* =========================================
-   CLAIM MODE
-========================================= */
-
-function setClaimMode(
-  enabled
-) {
-
-  if (
-    !startButton
-  ) {
-
-    return;
-
-  }
-
-
-  startButton.dataset.mode =
-  enabled
-  ? "claim": "start";
-
-}
-
-
-/* =========================================
-   SHOW CLAIM BUTTON
-========================================= */
-
-function showClaimButton() {
-
-  stopTimer();
-
-
-  setClaimMode(
-    true
-  );
-
-
-  setButtonText(
-    "CLAIM BTTC"
-  );
-
-
-  if (
-    startButton
-  ) {
-
-    startButton.disabled =
-    false;
-
-
-    startButton.classList.add(
-      "claim-ready"
-    );
-
-  }
-
-
-  setStatus(
-    "Your 1,000 BTTC reward is ready."
-  );
-
-}
-
-
-/* =========================================
-   SHOW START BUTTON
-========================================= */
-
-function showStartButton() {
-
-  stopTimer();
-
-
-  setClaimMode(
-    false
-  );
-
-
-  setButtonText(
-    "Start"
-  );
-
-
-  if (
-    startButton
-  ) {
-
-    startButton.disabled =
-    false;
-
-
-    startButton.classList.remove(
-      "claim-ready"
-    );
-
-  }
-
-
-  setStatus(
-    ""
-  );
-
-}
-
-
-/* =========================================
-   COUNTDOWN
-========================================= */
-
-function startCountdown(
-  session
-) {
-
-  if (
-    !session ||
-    !session.ends_at
-  ) {
-
-    showStartButton();
-
-    return;
-
-  }
-
-
-  MiningSession =
-  session;
-
-
-  saveMiningSession(
-    session
-  );
-
-
-  stopTimer();
-
-
-  setClaimMode(
-    false
-  );
-
-
-  if (
-    startButton
-  ) {
-
-    startButton.disabled =
-    true;
-
-
-    startButton.classList.remove(
-      "claim-ready"
-    );
-
-  }
-
-
-  function update() {
-
-    const endTime =
-    new Date(
-      session.ends_at
-    ).getTime();
-
-
-    const now =
-    Date.now();
-
-
-    const remaining =
-    Math.max(
-      0,
-      Math.ceil(
-        (
-          endTime -
-          now
-        ) / 1000
-      )
-    );
-
-
-    if (
-      remaining <=
-      0
-    ) {
-
-      showClaimButton();
-
-      return;
-
-    }
-
-
-    setButtonText(
-      formatTime(
-        remaining
-      )
-    );
-
-
-    setStatus(
-      "Mining in progress..."
-    );
-
-  }
-
-
-  update();
-
-
-  MiningTimer =
-  setInterval(
-    update,
-    1000
-  );
-
-}
-
-
-/* =========================================
-   START Mining
-========================================= */
-
-async function startMining() {
-
-  if (
-    !tg
-  ) {
-
-    alert(
-      "Please open BTTC Earn inside Telegram."
-    );
-
-    return;
-
-  }
-
-
-  if (
-    !tg.initData
-  ) {
-
-    alert(
-      "Telegram authentication data is unavailable."
-    );
-
-    return;
-
-  }
-
-
-  if (
-    !currentUser
-  ) {
-
-    alert(
-      "Please wait for your Telegram account to load."
-    );
-
-    return;
-
-  }
-
-
-  mediumHaptic();
-
-
-  if (
-    startButton
-  ) {
-
-    startButton.disabled =
-    true;
-
-  }
-
-
-  setClaimMode(
-    false
-  );
-
-
-  setButtonText(
-    "Mining..."
-  );
-
-
-  setStatus(
-    "Mining Started Collect Your Reward after 15 min."
-  );
-
-
-  try {
-
-    const response =
-    await fetch(
-      START_Mining_FUNCTION,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type":
-          "application/json"
-        },
-
-        body: JSON.stringify({
-
-          initData:
-          tg.initData
-
-        })
-
-      }
-    );
-
-
-    const result =
-    await response.json();
-
-
-    console.log(
-      "start-Mining response:",
-      result
-    );
-
-
-    if (
-      !response.ok ||
-      !result.success ||
-      !result.session
-    ) {
-
-      throw new Error(
-        result.error ||
-        "Unable to start Mining."
-      );
-
-    }
-
-
-    startCountdown(
-      result.session
-    );
-
-
-  } catch (
-    error
-  ) {
-
-    console.error(
-      "Start Mining error:",
-      error
-    );
-
-
-    showStartButton();
-
-
-    alert(
-      error.message ||
-      "Unable to start Mining."
-    );
-
-  }
-
-}
-
-
-/* =========================================
-   CLAIM Mining
-========================================= */
-
-async function claimMining() {
-
-  if (
-    !tg
-  ) {
-
-    alert(
-      "Please open BTTC Earn inside Telegram."
-    );
-
-    return;
-
-  }
-
-
-  if (
-    !tg.initData
-  ) {
-
-    alert(
-      "Telegram authentication data is unavailable."
-    );
-
-    return;
-
-  }
-
-
-  mediumHaptic();
-
-
-  if (
-    startButton
-  ) {
-
-    startButton.disabled =
-    true;
-
-  }
-
-
-  setButtonText(
-    "Claiming..."
-  );
-
-
-  setStatus(
-    "Checking your Mining session..."
-  );
-
-
-  try {
-
-    const response =
-    await fetch(
-      CLAIM_Mining_FUNCTION,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type":
-          "application/json"
-        },
-
-        body: JSON.stringify({
-
-          initData:
-          tg.initData
-
-        })
-
-      }
-    );
-
-
-    const result =
-    await response.json();
-
-
-    console.log(
-      "claim-Mining response:",
-      result
-    );
-
-
-    if (
-      !response.ok ||
       !result.success
     ) {
 
-      throw new Error(
-        result.error ||
-        "Unable to claim reward."
+      console.warn(
+        "Telegram user request failed:",
+        result.error
+      );
+
+      /*
+       * IMPORTANT:
+       *
+       * Do not block Start Earning.
+       * Telegram initData is enough for
+       * the secure earning Edge Function.
+       */
+
+      return (
+        telegramClientUser ||
+        null
+      );
+
+    }
+
+
+    const serverUser =
+    result.user ||
+    result.data ||
+    result;
+
+
+    if (
+      serverUser
+    ) {
+
+      currentUser =
+      serverUser;
+
+    }
+
+
+    if (
+      result.balance_bttc !==
+      undefined
+    ) {
+
+      updateBTTCBalance(
+        result.balance_bttc
       );
 
     }
 
 
     if (
-      result.new_balance_bttc !==
-      undefined &&
-      result.new_balance_bttc !==
-      null
+      result.bttc_balance !==
+      undefined
     ) {
 
       updateBTTCBalance(
-        result.new_balance_bttc
+        result.bttc_balance
       );
 
     }
 
 
-    clearSavedMiningSession();
+    if (
+      result.balance_usdt !==
+      undefined
+    ) {
+
+      updateUSDTBalance(
+        result.balance_usdt
+      );
+
+    }
 
 
-    MiningSession =
-    null;
+    if (
+      result.usdt_balance !==
+      undefined
+    ) {
+
+      updateUSDTBalance(
+        result.usdt_balance
+      );
+
+    }
 
 
-    successHaptic();
-
-
-    showStartButton();
-
-
-    setStatus(
-      "+1,000 BTTC added to your balance."
+    return (
+      serverUser ||
+      telegramClientUser ||
+      null
     );
 
 
-  } catch (
-    error
-  ) {
+  } catch (error) {
 
     console.error(
-      "Claim error:",
+      "loadTelegramUser error:",
       error
     );
 
 
-    setClaimMode(
-      true
-    );
+    /*
+     * Do NOT prevent earning because
+     * this optional profile request failed.
+     */
 
-
-    setButtonText(
-      "CLAIM 1,000 BTTC"
-    );
-
-
-    if (
-      startButton
-    ) {
-
-      startButton.disabled =
-      false;
-
-
-      startButton.classList.add(
-        "claim-ready"
-      );
-
-    }
-
-
-    setStatus(
-      ""
-    );
-
-
-    alert(
-      error.message ||
-      "Unable to claim reward."
+    return (
+      telegramClientUser ||
+      null
     );
 
   }
@@ -1315,142 +664,27 @@ async function claimMining() {
 }
 
 
-/* =========================================
-   START / CLAIM BUTTON
-========================================= */
-
-if (
-  startButton
-) {
-
-  startButton.addEventListener(
-    "click",
-    async function () {
-
-      if (
-        startButton.dataset.mode ===
-        "claim"
-      ) {
-
-        await claimMining();
-
-        return;
-
-      }
-
-
-      const buttonText =
-      (
-        MiningButtonText
-        ?.textContent ||
-        startButton
-        .textContent ||
-        ""
-      ).toUpperCase();
-
-
-      if (
-        buttonText.includes(
-          "CLAIM"
-        )
-      ) {
-
-        await claimMining();
-
-        return;
-
-      }
-
-
-      await startMining();
-
-    }
-  );
-
-}
-
-
-/* =========================================
-   RESTORE Mining SESSION
-========================================= */
-
-function restoreMiningSession() {
-
-  const savedSession =
-  getSavedMiningSession();
-
-
-  if (
-    !savedSession ||
-    !savedSession.ends_at
-  ) {
-
-    showStartButton();
-
-    return;
-
-  }
-
-
-  const endTime =
-  new Date(
-    savedSession.ends_at
-  ).getTime();
-
-
-  if (
-    Number.isNaN(
-      endTime
-    )
-  ) {
-
-    clearSavedMiningSession();
-
-    showStartButton();
-
-    return;
-
-  }
-
-
-  MiningSession =
-  savedSession;
-
-
-  if (
-    endTime <=
-    Date.now()
-  ) {
-
-    showClaimButton();
-
-    return;
-
-  }
-
-
-  startCountdown(
-    savedSession
-  );
-
-}
-
-
-/* =========================================
+/* =========================================================
    COPY TELEGRAM ID
-========================================= */
+========================================================= */
 
-if (
-  copyButton
-) {
+function setupCopyButton() {
+
+  if (!copyButton) {
+    return;
+  }
+
 
   copyButton.addEventListener(
     "click",
-    async function () {
+    async function (event) {
+
+      event.preventDefault();
+      event.stopPropagation();
+
 
       const id =
-      telegramId
-      ?.textContent
+      telegramId?.textContent
       ?.trim();
 
 
@@ -1460,16 +694,64 @@ if (
         "XXXXXXXXXX"
       ) {
 
+        showTelegramAlert(
+          "Telegram ID is not available."
+        );
+
         return;
 
       }
 
 
+      lightHaptic();
+
+
       try {
 
-        await navigator.clipboard.writeText(
-          id
-        );
+        if (
+          navigator.clipboard &&
+          navigator.clipboard.writeText
+        ) {
+
+          await navigator.clipboard.writeText(
+            id
+          );
+
+        } else {
+
+          const textarea =
+          document.createElement(
+            "textarea"
+          );
+
+
+          textarea.value =
+          id;
+
+
+          textarea.style.position =
+          "fixed";
+
+          textarea.style.opacity =
+          "0";
+
+
+          document.body.appendChild(
+            textarea
+          );
+
+
+          textarea.select();
+
+
+          document.execCommand(
+            "copy"
+          );
+
+
+          textarea.remove();
+
+        }
 
 
         try {
@@ -1510,68 +792,16 @@ if (
         }
 
 
-      } catch (
-        error
-      ) {
+      } catch (error) {
 
         console.error(
           "Copy ID error:",
           error
         );
 
-
-        /*
-         * Clipboard fallback.
-         */
-
-        try {
-
-          const textarea =
-          document.createElement(
-            "textarea"
-          );
-
-
-          textarea.value =
-          id;
-
-
-          textarea.style.position =
-          "fixed";
-
-
-          textarea.style.opacity =
-          "0";
-
-
-          document.body.appendChild(
-            textarea
-          );
-
-
-          textarea.select();
-
-
-          document.execCommand(
-            "copy"
-          );
-
-
-          textarea.remove();
-
-
-          alert(
-            "Telegram ID copied successfully."
-          );
-
-
-        } catch (_) {
-
-          alert(
-            "Unable to copy Telegram ID."
-          );
-
-        }
+        showTelegramAlert(
+          "Unable to copy Telegram ID."
+        );
 
       }
 
@@ -1581,291 +811,27 @@ if (
 }
 
 
-/* =========================================
-   PROCESS TELEGRAM REFERRAL
-========================================= */
+/* =========================================================
+   LOCAL SESSION STORAGE
+========================================================= */
 
-async function processTelegramReferral() {
-
-  /*
-   * Must be running inside Telegram.
-   */
-
-  if (
-    !tg
-  ) {
-
-    console.log(
-      "Referral: Telegram WebApp unavailable."
-    );
-
-    return;
-
-  }
-
-
-  /*
-   * Telegram initData is required
-   * by the secure Edge Function.
-   */
-
-  if (
-    !tg.initData
-  ) {
-
-    console.log(
-      "Referral: Telegram initData unavailable."
-    );
-
-    return;
-
-  }
-
-
-  /*
-   * Telegram places the ?start=
-   * value in start_param.
-   */
-
-  const startParam =
-  tg.initDataUnsafe
-  ?.start_param;
-
-
-  if (
-    !startParam
-  ) {
-
-    console.log(
-      "Referral: no start parameter."
-    );
-
-    return;
-
-  }
-
-
-  /*
-   * The start parameter is the
-   * referrer's Telegram ID.
-   */
-
-  const referrerTelegramId =
-  Number(
-    startParam
-  );
-
-
-  if (
-    !Number.isSafeInteger(
-      referrerTelegramId
-    ) ||
-    referrerTelegramId <=
-    0
-  ) {
-
-    console.error(
-      "Referral: invalid referrer Telegram ID:",
-      startParam
-    );
-
-    return;
-
-  }
-
-
-  /*
-   * Get the current user's Telegram ID.
-   */
-
-  const currentTelegramId =
-  Number(
-    tg.initDataUnsafe
-    ?.user
-    ?.id
-  );
-
-
-  if (
-    !Number.isSafeInteger(
-      currentTelegramId
-    ) ||
-    currentTelegramId <=
-    0
-  ) {
-
-    console.log(
-      "Referral: current Telegram user unavailable."
-    );
-
-    return;
-
-  }
-
-
-  /*
-   * Self-referral protection.
-   */
-  if (
-    referrerTelegramId ===
-    currentTelegramId
-  ) {
-
-    console.log(
-      "Referral: self-referral blocked."
-    );
-
-    return;
-
-  }
-
-
-  /*
-   * Local duplicate guard.
-   *
-   * The database/RPC remains the
-   * final authority.
-   */
-
-  const referralKey =
-  `bttc_referral_attempt_${currentTelegramId}`;
-
-
-  if (
-    localStorage.getItem(
-      referralKey
-    )
-  ) {
-
-    console.log(
-      "Referral: already attempted on this device."
-    );
-
-    return;
-
-  }
-
-
-  console.log(
-    "Referral detected.",
-    {
-      referrerTelegramId:
-      referrerTelegramId,
-
-      currentTelegramId:
-      currentTelegramId
-    }
-  );
-
+function saveEarningSession(
+  session
+) {
 
   try {
 
-    const response =
-    await fetch(
-      PROCESS_REFERRAL_FUNCTION,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type":
-          "application/json"
-        },
-
-        body: JSON.stringify({
-
-          initData:
-          tg.initData,
-
-          referrerTelegramId:
-          referrerTelegramId
-
-        })
-
-      }
+    localStorage.setItem(
+      EARNING_STORAGE_KEY,
+      JSON.stringify(
+        session
+      )
     );
 
-
-    const result =
-    await response.json();
-
-
-    console.log(
-      "process-referral response:",
-      result
-    );
-
-
-    /*
-     * Only mark the local attempt
-     * after the server responds.
-     */
-
-    if (
-      response.ok &&
-      result.success
-    ) {
-
-      localStorage.setItem(
-        referralKey,
-        "1"
-      );
-
-
-      console.log(
-        "Referral processed successfully.",
-        result
-      );
-
-
-      successHaptic();
-
-
-      /*
-       * Do not display a popup if the
-       * referral was silently processed.
-       *
-       * This keeps the Mini App UX clean.
-       */
-
-      return;
-
-    }
-
-
-    /*
-     * Existing referrer / already processed
-     * is not a client-side failure that
-     * needs to be retried forever.
-     */
-
-    if (
-      result?.error ===
-      "This account already has a referrer" ||
-      result?.error ===
-      "Referral already processed"
-    ) {
-
-      localStorage.setItem(
-        referralKey,
-        "1"
-      );
-
-    }
-
+  } catch (error) {
 
     console.error(
-      "Referral processing failed:",
-      result?.error ||
-      "Unknown error"
-    );
-
-
-  } catch (
-    error
-  ) {
-
-    console.error(
-      "Referral request failed:",
+      "Unable to save earning session:",
       error
     );
 
@@ -1874,176 +840,678 @@ async function processTelegramReferral() {
 }
 
 
-/* =========================================
-   QUICK ACTIONS
-========================================= */
+function getSavedEarningSession() {
 
-const quickButtons =
-document.querySelectorAll(
-  ".quick-card"
-);
+  try {
 
-
-quickButtons.forEach(
-  function (button) {
-
-    button.addEventListener(
-      "click",
-      function () {
-
-        const page =
-        button.dataset.page;
+    const saved =
+    localStorage.getItem(
+      EARNING_STORAGE_KEY
+    );
 
 
-        try {
+    if (!saved) {
 
-          tg?.HapticFeedback
-          ?.selectionChanged();
+      return null;
 
-        } catch (_) {}
+    }
 
 
-        console.log(
-          "Quick page:",
-          page
-        );
+    return JSON.parse(
+      saved
+    );
 
-      }
+
+  } catch (error) {
+
+    console.error(
+      "Unable to read earning session:",
+      error
+    );
+
+
+    return null;
+
+  }
+
+}
+
+
+function clearSavedEarningSession() {
+
+  try {
+
+    localStorage.removeItem(
+      EARNING_STORAGE_KEY
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Unable to clear earning session:",
+      error
     );
 
   }
-);
+
+}
 
 
-/* =========================================
-   BOTTOM NAVIGATION
-========================================= */
+/* =========================================================
+   FORMAT TIME
+========================================================= */
 
-const navItems =
-document.querySelectorAll(
-  ".nav-item"
-);
+function formatTime(
+  seconds
+) {
 
-
-navItems.forEach(
-  function (item) {
-
-    item.addEventListener(
-      "click",
-      function () {
-
-        const page =
-        item.dataset.page;
+  const minutes =
+  Math.floor(
+    seconds / 60
+  );
 
 
-        navItems.forEach(
-          function (nav) {
-
-            nav.classList.remove(
-              "active"
-            );
-
-          }
-        );
+  const remainingSeconds =
+  seconds % 60;
 
 
-        item.classList.add(
-          "active"
-        );
+  return (
+    String(minutes)
+    .padStart(
+      2,
+      "0"
+    ) +
+    ":" +
+    String(
+      remainingSeconds
+    ).padStart(
+      2,
+      "0"
+    )
+  );
+
+}
 
 
-        try {
+/* =========================================================
+   STOP TIMER
+========================================================= */
 
-          tg?.HapticFeedback
-          ?.selectionChanged();
+function stopTimer() {
 
-        } catch (_) {}
+  if (
+    earningTimer
+  ) {
+
+    clearInterval(
+      earningTimer
+    );
+
+    earningTimer =
+    null;
+
+  }
+
+}
 
 
-        console.log(
-          "Navigation:",
-          page
-        );
+/* =========================================================
+   CLAIM MODE
+========================================================= */
 
-      }
+function setClaimMode(
+  enabled
+) {
+
+  if (!startButton) {
+    return;
+  }
+
+
+  startButton.dataset.mode =
+  enabled
+  ? "claim": "start";
+
+}
+
+
+/* =========================================================
+   SHOW CLAIM BUTTON
+========================================================= */
+
+function showClaimButton() {
+
+  stopTimer();
+
+  setClaimMode(
+    true
+  );
+
+
+  setButtonText(
+    "CLAIM BTTC"
+  );
+
+
+  if (startButton) {
+
+    startButton.disabled =
+    false;
+
+    startButton.classList.add(
+      "claim-ready"
     );
 
   }
-);
 
 
-/* =========================================
-   PREVENT DOUBLE-TAP ZOOM
-========================================= */
+  setStatus(
+    "Your BTTC reward is ready."
+  );
 
-let lastTouchEnd =
-0;
+}
 
 
-document.addEventListener(
-  "touchend",
-  function (event) {
+/* =========================================================
+   SHOW START BUTTON
+========================================================= */
+
+function showStartButton() {
+
+  stopTimer();
+
+  setClaimMode(
+    false
+  );
+
+
+  setButtonText(
+    "START"
+  );
+
+
+  if (startButton) {
+
+    startButton.disabled =
+    false;
+
+    startButton.classList.remove(
+      "claim-ready"
+    );
+
+  }
+
+
+  setStatus(
+    ""
+  );
+
+}
+
+
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+function startCountdown(
+  session
+) {
+
+  if (
+    !session ||
+    !session.ends_at
+  ) {
+
+    showStartButton();
+
+    return;
+
+  }
+
+
+  earningSession =
+  session;
+
+
+  saveEarningSession(
+    session
+  );
+
+
+  stopTimer();
+
+  setClaimMode(
+    false
+  );
+
+
+  if (startButton) {
+
+    startButton.disabled =
+    true;
+
+    startButton.classList.remove(
+      "claim-ready"
+    );
+
+  }
+
+
+  function update() {
+
+    const endTime =
+    new Date(
+      session.ends_at
+    ).getTime();
+
 
     const now =
     Date.now();
 
 
     if (
-      now -
-      lastTouchEnd <=
-      300
+      Number.isNaN(
+        endTime
+      )
     ) {
 
-      event.preventDefault();
+      showStartButton();
+
+      return;
 
     }
 
 
-    lastTouchEnd =
-    now;
+    const remaining =
+    Math.max(
+      0,
+      Math.ceil(
+        (
+          endTime -
+          now
+        ) / 1000
+      )
+    );
 
-  },
-  false
-);
+
+    if (
+      remaining <= 0
+    ) {
+
+      showClaimButton();
+
+      return;
+
+    }
 
 
-/* =========================================
-   START APP
-========================================= */
+    setButtonText(
+      formatTime(
+        remaining
+      )
+    );
 
-(async function () {
+
+    setStatus(
+      "Earning in progress..."
+    );
+
+  }
+
+
+  update();
+
+
+  earningTimer =
+  setInterval(
+    update,
+    1000
+  );
+
+}
+
+
+/* =========================================================
+   START EARNING
+   IMPORTANT:
+   Does NOT depend on currentUser.
+========================================================= */
+
+async function startEarning() {
+
+  console.log(
+    "START EARNING clicked"
+  );
+
 
   /*
-   * First load and verify
-   * the Telegram user.
+   * Telegram check.
    */
 
-  currentUser =
-  await loadTelegramUser();
+  if (!tg) {
+
+    showTelegramAlert(
+      "Please open BTTC Earn inside Telegram."
+    );
+
+    return;
+
+  }
 
 
   /*
-   * Process a referral after
-   * Telegram authentication is ready.
+   * Secure Telegram authentication.
    */
 
-  await processTelegramReferral();
+  if (
+    !tg.initData
+  ) {
+
+    showTelegramAlert(
+      "Telegram authentication data is unavailable. Please reopen the Mini App from Telegram."
+    );
+
+    return;
+
+  }
 
 
   /*
-   * Restore an existing
-   * Mining session.
+   * Prevent double requests.
    */
 
-  restoreMiningSession();
+  if (
+    startRequestRunning
+  ) {
 
-})();
+    return;
+
+  }
 
 
-/* =========================================
-   READY
-========================================= */
+  /*
+   * If an active session exists,
+   * don't create another one.
+   */
 
-console.log(
-  "BTTC Earn loaded successfully."
-);
+  if (
+    earningSession &&
+    earningSession.ends_at
+  ) {
+
+    const existingEnd =
+    new Date(
+      earningSession.ends_at
+    ).getTime();
+
+
+    if (
+      Number.isFinite(
+        existingEnd
+      ) &&
+      existingEnd >
+      Date.now()
+    ) {
+
+      startCountdown(
+        earningSession
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  startRequestRunning =
+  true;
+
+
+  mediumHaptic();
+
+
+  if (startButton) {
+
+    startButton.disabled =
+    true;
+
+  }
+
+
+  setClaimMode(
+    false
+  );
+
+
+  setButtonText(
+    "Starting..."
+  );
+
+
+  setStatus(
+    "Starting your earning session..."
+  );
+
+
+  try {
+
+    const response =
+    await fetch(
+      START_EARNING_FUNCTION,
+      {
+        method:
+        "POST",
+
+        headers: {
+          "Content-Type":
+          "application/json"
+        },
+
+        body:
+        JSON.stringify({
+          initData:
+          tg.initData
+        })
+      }
+    );
+
+
+    /*
+     * Read response safely.
+     */
+
+    const rawText =
+    await response.text();
+
+
+    let result = {};
+
+
+    try {
+
+      result =
+      rawText
+      ? JSON.parse(
+        rawText
+      ): {};
+
+    } catch (_) {
+
+      throw new Error(
+        "The earning server returned an invalid response."
+      );
+
+    }
+
+
+    console.log(
+      "start-earning response:",
+      response.status,
+      result
+    );
+
+
+    if (
+      !response.ok
+    ) {
+
+      throw new Error(
+        result.error ||
+        `Server error (${response.status}).`
+      );
+
+    }
+
+
+    if (
+      !result.success
+    ) {
+
+      throw new Error(
+        result.error ||
+        "Unable to start earning."
+      );
+
+    }
+
+
+    if (
+      !result.session ||
+      !result.session.ends_at
+    ) {
+
+      throw new Error(
+        "The server did not return a valid earning session."
+      );
+
+    }
+
+
+    /*
+     * Server is authoritative.
+     */
+
+    startCountdown(
+      result.session
+    );
+
+
+    successHaptic();
+
+
+  } catch (error) {
+
+    console.error(
+      "Start earning error:",
+      error
+    );
+
+
+    showStartButton();
+
+
+    errorHaptic();
+
+
+    showTelegramAlert(
+      error?.message ||
+      "Unable to start earning."
+    );
+
+
+  } finally {
+
+    startRequestRunning =
+    false;
+
+  }
+
+}
+
+
+/* =========================================================
+   CLAIM EARNING
+========================================================= */
+
+async function claimEarning() {
+
+  if (!tg) {
+
+    showTelegramAlert(
+      "Please open BTTC Earn inside Telegram."
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !tg.initData
+  ) {
+
+    showTelegramAlert(
+      "Telegram authentication data is unavailable."
+    );
+
+    return;
+
+  }
+
+
+  if (
+    claimRequestRunning
+  ) {
+
+    return;
+
+  }
+
+
+  claimRequestRunning =
+  true;
+
+
+  mediumHaptic();
+
+
+  if (startButton) {
+
+    startButton.disabled =
+    true;
+
+  }
+
+
+  setButtonText(
+    "Claiming..."
+  );
+
+
+  setStatus(
+    "Checking your earning session..."
+  );
+
+
+  try {
+
+    const response =
+    await fetch(
+      CLAIM_EARNING_FUNCTION,
+      {
+        method:
+        "POST",
+
+        headers: {
+          "Content-Type":
+          "application/json"
+        },
+
+        body:
+        JSON.stringify({
+          initData:
+          tg.initData
+        })
+      }
+    );
