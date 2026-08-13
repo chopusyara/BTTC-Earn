@@ -1,53 +1,30 @@
 /* =========================================================
    BTTC EARN — REFERRAL PAGE
-   referral.css
+   MATCHED EXACTLY TO referral.html
 ========================================================= */
 
-:root {
-    --ref-bg: #05050d;
-    --ref-card: #0d0d1b;
-
-    --ref-purple: #9b4dff;
-    --ref-purple-light: #c17aff;
-    --ref-purple-dark: #5a20b8;
-
-    --ref-blue: #526fff;
-
-    --ref-text: #ffffff;
-    --ref-muted: #9999ad;
-
-    --ref-border: rgba(156, 77, 255, 0.30);
+* {
+  box-sizing: border-box;
 }
 
-
-/* =========================================================
-   PAGE
-========================================================= */
-
 .referral-page {
-    width: 100%;
-    max-width: 600px;
-
-    min-height: 100vh;
-
-    margin: 0 auto;
-
-    padding:
-        12px
-        16px
-        110px;
-
-    background:
-        radial-gradient(
-            circle at 50% 5%,
-            rgba(126, 48, 255, .16),
-            transparent 30%
-        ),
-        var(--ref-bg);
-
-    color: var(--ref-text);
-
-    overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px 14px 125px;
+  color: #fff;
+  overflow-x: hidden;
+  background:
+  radial-gradient(
+  circle at 50% 0%,
+  rgba(115, 35, 210, 0.18),
+  transparent 34%
+  ),
+  linear-gradient(
+  180deg,
+  #090313 0%,
+  #05040d 55%,
+  #03030a 100%
+  );
 }
 
 
@@ -56,210 +33,124 @@
 ========================================================= */
 
 .referral-header {
-    position: relative;
-
-    width: 100%;
-
-    padding:
-        12px
-        5px
-        28px;
-
-    text-align: center;
+  width: 100%;
+  text-align: center;
+  padding: 6px 0 24px;
 }
-
-.referral-header::before {
-    content: "";
-
-    position: absolute;
-
-    width: 280px;
-    height: 180px;
-
-    left: 50%;
-    top: -30px;
-
-    transform: translateX(-50%);
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(151, 67, 255, .28),
-            transparent 68%
-        );
-
-    filter: blur(22px);
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   BACK BUTTON
-========================================================= */
-
-.referral-back {
-    position: absolute;
-
-    z-index: 2;
-
-    top: 7px;
-    left: 0;
-
-    width: 36px;
-    height: 36px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    border-radius: 50%;
-
-    background:
-        rgba(139, 61, 255, .09);
-
-    border:
-        1px solid
-        rgba(139, 61, 255, .30);
-
-    color: #c28aff;
-
-    font-size: 27px;
-
-    line-height: 1;
-
-    box-shadow:
-        0 0 12px
-        rgba(139, 61, 255, .15);
-}
-
-.referral-back:active {
-    transform: scale(.90);
-}
-
-
-/* =========================================================
-   HEADER CONTENT
-========================================================= */
 
 .referral-header-content {
-    position: relative;
-
-    z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .referral-header-icon {
-    width: 48px;
-    height: 48px;
+  width: 54px;
+  height: 54px;
 
-    margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    display: flex;
+  margin-bottom: 10px;
 
-    align-items: center;
-    justify-content: center;
+  border-radius: 17px;
 
-    border-radius: 16px;
+  font-size: 28px;
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(156, 77, 255, .24),
-            rgba(77, 31, 151, .18)
-        );
+  background:
+  radial-gradient(
+  circle,
+  rgba(85, 168, 255, 0.25),
+  rgba(109, 40, 217, 0.14)
+  );
 
-    border:
-        1px solid
-        rgba(184, 119, 255, .40);
+  border: 1px solid rgba(175, 80, 255, 0.55);
 
-    font-size: 25px;
-
-    box-shadow:
-        0 0 18px
-        rgba(139, 61, 255, .22);
+  box-shadow:
+  0 0 14px rgba(143, 53, 255, 0.3),
+  inset 0 0 16px rgba(106, 40, 217, 0.15);
 }
 
 .referral-header h1 {
-    margin: 0;
+  margin: 0;
 
-    color: #ffffff;
+  font-size: 27px;
+  line-height: 1.15;
+  font-weight: 900;
 
-    font-size: 23px;
+  letter-spacing: -0.5px;
 
-    font-weight: 800;
+  color: #fff;
 
-    line-height: 1.15;
+  text-shadow:
+  0 2px 10px rgba(255, 255, 255, 0.12);
 }
 
 .referral-big-reward {
-    margin-top: 10px;
+  margin-top: 7px;
 
-    color: #ffffff;
+  font-size: 34px;
+  line-height: 1;
 
-    font-size: 42px;
+  font-weight: 950;
 
-    font-weight: 900;
+  color: #d47aff;
 
-    line-height: 1;
-
-    letter-spacing: -1px;
-
-    text-shadow:
-        0 0 5px #ffffff,
-        0 0 12px #c06cff,
-        0 0 27px #a33cff,
-        0 0 50px rgba(139, 61, 255, .80);
+  text-shadow:
+  0 0 5px rgba(214, 122, 255, 1),
+  0 0 14px rgba(181, 71, 255, 0.95),
+  0 0 30px rgba(145, 43, 255, 0.65);
 }
 
 .referral-header p {
-    margin: 9px 0 0;
+  margin: 8px 0 0;
 
-    color: #bbb3c9;
+  font-size: 14px;
 
-    font-size: 12px;
-
-    font-weight: 600;
+  color: rgba(255, 255, 255, 0.58);
 }
 
 
 /* =========================================================
-   GENERIC CARD
+   GENERAL CARDS
 ========================================================= */
 
 .referral-card {
-    position: relative;
+  width: 100%;
 
-    width: 100%;
+  margin-bottom: 14px;
 
-    margin-top: 14px;
+  padding: 17px;
 
-    padding: 17px;
+  border-radius: 20px;
 
-    border-radius: 21px;
+  background:
+  linear-gradient(
+  145deg,
+  rgba(22, 15, 39, 0.94),
+  rgba(8, 7, 18, 0.97)
+  );
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(18, 18, 37, .98),
-            rgba(7, 7, 17, .99)
-        );
+  border: 1px solid rgba(175, 69, 255, 0.34);
 
-    border:
-        1px solid
-        var(--ref-border);
+  box-shadow:
+  0 0 18px rgba(119, 37, 210, 0.08),
+  inset 0 0 22px rgba(150, 55, 255, 0.025);
+}
 
-    box-shadow:
-        0 8px 24px
-        rgba(0, 0, 0, .25),
+.referral-card-title {
+  margin-bottom: 12px;
 
-        0 0 14px
-        rgba(139, 61, 255, .08),
+  text-align: center;
 
-        inset 0 0 20px
-        rgba(139, 61, 255, .025);
+  font-size: 17px;
+  font-weight: 900;
+
+  color: #d58aff;
+
+  text-shadow:
+  0 0 8px rgba(205, 108, 255, 0.45);
 }
 
 
@@ -267,59 +158,44 @@
    REFERRAL LINK
 ========================================================= */
 
-.referral-card-title {
-    margin-bottom: 12px;
-
-    color: #c18aff;
-
-    text-align: center;
-
-    font-size: 16px;
-
-    font-weight: 800;
+.referral-link-card {
+  position: relative;
 }
 
 .referral-link-box {
-    width: 100%;
+  width: 100%;
+  min-height: 51px;
 
-    min-height: 48px;
+  display: flex;
+  align-items: center;
 
-    display: flex;
+  padding: 0 14px;
 
-    align-items: center;
+  border-radius: 14px;
 
-    padding: 0 13px;
+  background:
+  rgba(0, 0, 0, 0.42);
 
-    border-radius: 13px;
+  border: 1px solid rgba(180, 70, 255, 0.58);
 
-    background:
-        rgba(2, 2, 10, .85);
+  box-shadow:
+  inset 0 0 12px rgba(140, 45, 255, 0.06),
+  0 0 10px rgba(139, 45, 255, 0.06);
 
-    border:
-        1px solid
-        rgba(155, 77, 255, .50);
-
-    box-shadow:
-        inset 0 0 15px
-        rgba(139, 61, 255, .04);
+  overflow: hidden;
 }
 
 #referralLink {
-    display: block;
+  width: 100%;
 
-    width: 100%;
+  overflow: hidden;
 
-    overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 
-    white-space: nowrap;
+  font-size: 13px;
 
-    text-overflow: ellipsis;
-
-    color: #ddd9e6;
-
-    font-size: 11px;
-
-    font-weight: 500;
+  color: rgba(255, 255, 255, 0.82);
 }
 
 
@@ -328,96 +204,93 @@
 ========================================================= */
 
 .referral-actions {
-    width: 100%;
+  display: grid;
 
-    display: grid;
+  grid-template-columns: 1fr 1fr;
 
-    grid-template-columns:
-        1fr 1fr;
+  gap: 10px;
 
-    gap: 9px;
-
-    margin-top: 10px;
+  margin-top: 11px;
 }
 
 .referral-button {
-    height: 46px;
+  height: 48px;
 
-    border-radius: 13px;
+  border-radius: 13px;
 
-    color: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
 
-    font-size: 12px;
+  letter-spacing: 0.7px;
 
-    font-weight: 800;
+  cursor: pointer;
 
-    letter-spacing: .2px;
-
-    transition:
-        transform .15s ease,
-        box-shadow .2s ease;
-}
-
-.referral-button:active {
-    transform: scale(.96);
+  transition:
+  transform 0.15s ease,
+  box-shadow 0.15s ease,
+  background 0.15s ease;
 }
 
 .copy-button {
-    background:
-        linear-gradient(
-            135deg,
-            #7629d5,
-            #4d22b1
-        );
+  color: #d48aff;
 
-    border:
-        1px solid
-        rgba(197, 128, 255, .62);
+  background:
+  rgba(170, 65, 255, 0.09);
 
-    box-shadow:
-        0 0 13px
-        rgba(139, 61, 255, .30);
-}
+  border: 1px solid rgba(194, 88, 255, 0.52);
 
-.copy-button:hover {
-    box-shadow:
-        0 0 20px
-        rgba(139, 61, 255, .48);
+  box-shadow:
+  0 0 12px rgba(180, 70, 255, 0.08);
 }
 
 .share-button {
-    background:
-        linear-gradient(
-            135deg,
-            #a040ff,
-            #5532d8
-        );
+  color: #fff;
 
-    border:
-        1px solid
-        rgba(203, 143, 255, .70);
+  background:
+  linear-gradient(
+  135deg,
+  #a33cff,
+  #7132e8
+  );
 
-    box-shadow:
-        0 0 17px
-        rgba(139, 61, 255, .42);
+  border: 1px solid rgba(220, 145, 255, 0.65);
+
+  box-shadow:
+  0 0 16px rgba(157, 52, 255, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.referral-button:active {
+  transform: scale(0.96);
+}
+
+.copy-button:hover {
+  background:
+  rgba(170, 65, 255, 0.18);
+
+  box-shadow:
+  0 0 17px rgba(180, 70, 255, 0.25);
 }
 
 .share-button:hover {
-    box-shadow:
-        0 0 24px
-        rgba(139, 61, 255, .60);
+  box-shadow:
+  0 0 22px rgba(157, 52, 255, 0.5);
 }
 
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
 .referral-description {
-    margin: 12px 3px 0;
+  margin: 12px 2px 0;
 
-    color: #8f8fa2;
+  text-align: center;
 
-    text-align: center;
+  font-size: 11px;
+  line-height: 1.55;
 
-    font-size: 10px;
-
-    line-height: 1.55;
+  color: rgba(255, 255, 255, 0.46);
 }
 
 
@@ -426,191 +299,190 @@
 ========================================================= */
 
 .referral-reward-card {
-    width: 100%;
+  position: relative;
 
-    margin-top: 14px;
+  width: 100%;
 
-    padding: 18px;
+  display: flex;
+  align-items: center;
 
-    display: flex;
+  gap: 14px;
 
-    align-items: center;
+  margin: 14px 0;
 
-    gap: 14px;
+  padding: 18px;
 
-    border-radius: 21px;
+  border-radius: 20px;
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(39, 17, 68, .95),
-            rgba(10, 7, 23, .99)
-        );
+  background:
+  radial-gradient(
+  circle at 0% 50%,
+  rgba(190, 74, 255, 0.24),
+  transparent 45%
+  ),
+  linear-gradient(
+  145deg,
+  rgba(26, 12, 46, 0.98),
+  rgba(9, 7, 20, 0.98)
+  );
 
-    border:
-        1px solid
-        rgba(164, 82, 255, .55);
+  border: 1px solid rgba(185, 72, 255, 0.55);
 
-    box-shadow:
-        0 0 17px
-        rgba(139, 61, 255, .17),
-
-        inset 0 0 25px
-        rgba(139, 61, 255, .06);
+  box-shadow:
+  0 0 18px rgba(160, 52, 255, 0.18),
+  inset 0 0 20px rgba(160, 52, 255, 0.04);
 }
 
 .reward-coin {
-    width: 65px;
-    height: 65px;
+  flex: 0 0 auto;
 
-    min-width: 65px;
+  width: 58px;
+  height: 58px;
 
-    display: flex;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    align-items: center;
-    justify-content: center;
+  border-radius: 50%;
 
-    border-radius: 50%;
+  font-size: 24px;
+  font-weight: 900;
 
-    background:
-        radial-gradient(
-            circle at 35% 25%,
-            #d6a2ff,
-            #832bdd 45%,
-            #351078 100%
-        );
+  color: #fff;
 
-    border:
-        2px solid
-        rgba(220, 173, 255, .78);
+  background:
+  radial-gradient(
+  circle at 35% 30%,
+  #e4a0ff,
+  #943cff 55%,
+  #5b19a9 100%
+  );
 
-    color: #ffffff;
+  border: 1px solid rgba(235, 184, 255, 0.8);
 
-    font-size: 30px;
-
-    font-weight: 900;
-
-    box-shadow:
-        0 0 10px
-        rgba(177, 78, 255, .85),
-
-        0 0 30px
-        rgba(139, 61, 255, .45),
-
-        inset 0 0 12px
-        rgba(255, 255, 255, .18);
+  box-shadow:
+  0 0 10px rgba(205, 113, 255, 0.8),
+  0 0 26px rgba(153, 48, 255, 0.45),
+  inset 0 0 12px rgba(255, 255, 255, 0.22);
 }
 
 .reward-text {
-    min-width: 0;
+  min-width: 0;
 
-    display: flex;
-
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .reward-text strong {
-    color: #ffffff;
+  font-size: 20px;
+  line-height: 1.1;
 
-    font-size: 26px;
+  color: #fff;
 
-    font-weight: 900;
-
-    line-height: 1;
-
-    text-shadow:
-        0 0 12px
-        rgba(174, 76, 255, .80);
+  text-shadow:
+  0 0 9px rgba(255, 255, 255, 0.16);
 }
 
 .reward-text span {
-    margin-top: 7px;
+  margin-top: 5px;
 
-    color: #e6dff0;
+  font-size: 10px;
+  font-weight: 900;
 
-    font-size: 10px;
+  letter-spacing: 0.7px;
 
-    font-weight: 800;
+  color: #d79aff;
 }
 
 .reward-text small {
-    margin-top: 5px;
+  margin-top: 5px;
 
-    color: #9898aa;
+  font-size: 10px;
 
-    font-size: 10px;
+  color: rgba(255, 255, 255, 0.42);
 }
 
 
 /* =========================================================
-   STATS
+   STATISTICS
 ========================================================= */
 
 .referral-stats {
-    display: grid;
+  display: grid;
 
-    grid-template-columns:
-        1fr auto 1fr;
+  grid-template-columns: 1fr auto 1fr;
 
-    align-items: center;
+  align-items: stretch;
 
-    padding:
-        18px 7px;
+  padding: 0;
+
+  overflow: hidden;
 }
 
 .referral-stat {
-    display: flex;
+  min-width: 0;
 
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    align-items: center;
+  align-items: center;
+  justify-content: center;
 
-    text-align: center;
+  min-height: 115px;
+
+  padding: 15px 10px;
+
+  text-align: center;
 }
 
 .stat-icon {
-    margin-bottom: 5px;
+  margin-bottom: 6px;
 
-    font-size: 20px;
+  font-size: 24px;
+
+  filter:
+  drop-shadow(
+  0 0 7px rgba(67, 176, 255, 0.4)
+  );
 }
 
 .referral-stat > span {
-    color: #a39aae;
+  font-size: 11px;
 
-    font-size: 10px;
-
-    font-weight: 600;
+  color: rgba(255, 255, 255, 0.48);
 }
 
 .referral-stat > strong {
-    margin-top: 5px;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
 
-    color: #ffffff;
+  margin-top: 5px;
 
-    font-size: 22px;
+  font-size: 23px;
+  font-weight: 900;
 
-    font-weight: 900;
+  color: #fff;
 }
 
-.referral-stat > strong small {
-    color: #ad60ff;
+.referral-stat strong small {
+  font-size: 9px;
 
-    font-size: 8px;
-
-    font-weight: 800;
+  color: #bd72ff;
 }
 
 .stats-divider {
-    width: 1px;
+  width: 1px;
 
-    height: 60px;
+  margin: 18px 0;
 
-    background:
-        linear-gradient(
-            transparent,
-            rgba(160, 83, 255, .55),
-            transparent
-        );
+  background:
+  linear-gradient(
+  180deg,
+  transparent,
+  rgba(178, 73, 255, 0.45),
+  transparent
+  );
 }
 
 
@@ -619,110 +491,285 @@
 ========================================================= */
 
 .leaderboard-card {
-    padding:
-        18px 13px 10px;
+  padding: 16px;
 }
 
 .leaderboard-heading {
-    display: flex;
+  display: flex;
 
-    align-items: center;
-    justify-content: center;
+  align-items: center;
+  justify-content: center;
 
-    gap: 7px;
+  gap: 8px;
 
-    margin-bottom: 12px;
+  margin-bottom: 13px;
 }
 
-.leaderboard-heading span {
-    font-size: 19px;
+.leaderboard-heading > span {
+  font-size: 22px;
+
+  filter:
+  drop-shadow(
+  0 0 7px rgba(255, 193, 7, 0.4)
+  );
 }
 
 .leaderboard-heading h2 {
-    margin: 0;
+  margin: 0;
 
-    color: #c28bff;
+  font-size: 18px;
+  font-weight: 900;
 
-    font-size: 16px;
+  color: #d58aff;
 
-    font-weight: 800;
-
-    text-shadow:
-        0 0 12px
-        rgba(139, 61, 255, .55);
+  text-shadow:
+  0 0 8px rgba(205, 108, 255, 0.38);
 }
 
 .leaderboard-list {
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
 }
 
 .leaderboard-loading {
-    padding: 20px 5px;
+  min-height: 65px;
 
-    color: #77778a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    text-align: center;
+  border-radius: 15px;
 
-    font-size: 10px;
+  background:
+  rgba(255, 255, 255, 0.018);
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  color: rgba(255, 255, 255, 0.4);
+
+  font-size: 11px;
 }
 
-.leader-row {
-    min-height: 47px;
 
-    display: grid;
+/* =========================================================
+   JAVASCRIPT LEADERBOARD ROWS
+========================================================= */
 
-    grid-template-columns:
-        38px 1fr auto;
+.leaderboard-row {
+  position: relative;
 
-    align-items: center;
+  display: grid;
 
-    gap: 6px;
+  grid-template-columns: 39px minmax(0, 1fr) auto;
 
-    border-bottom:
-        1px solid
-        rgba(255, 255, 255, .045);
+  align-items: center;
+
+  min-height: 53px;
+
+  padding: 8px 11px;
+
+  border-radius: 14px;
+
+  background:
+  linear-gradient(
+  145deg,
+  rgba(255, 255, 255, 0.045),
+  rgba(255, 255, 255, 0.015)
+  );
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  overflow: hidden;
+
+  transition:
+  transform 0.16s ease,
+  border-color 0.16s ease,
+  box-shadow 0.16s ease;
 }
 
-.leader-row:last-child {
-    border-bottom: none;
+.leaderboard-row::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 2px;
+
+  background:
+  linear-gradient(
+  180deg,
+  transparent,
+  #a950ff,
+  transparent
+  );
+
+  box-shadow:
+  0 0 8px rgba(170, 80, 255, 0.7);
 }
 
-.leader-position {
-    text-align: center;
-
-    color: #9999aa;
-
-    font-size: 11px;
-
-    font-weight: 800;
+.leaderboard-row:active {
+  transform: scale(0.985);
 }
 
-.leader-position.top {
-    font-size: 20px;
+.leaderboard-rank {
+  width: 31px;
+  height: 31px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  font-size: 12px;
+  font-weight: 900;
+
+  color: rgba(255, 255, 255, 0.65);
+
+  background:
+  rgba(255, 255, 255, 0.045);
 }
 
-.leader-name {
-    min-width: 0;
+.leaderboard-name {
+  min-width: 0;
 
-    overflow: hidden;
+  overflow: hidden;
 
-    text-overflow: ellipsis;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 
-    white-space: nowrap;
+  padding: 0 8px;
 
-    color: #eeeeF6;
+  font-size: 13px;
+  font-weight: 800;
 
-    font-size: 11px;
-
-    font-weight: 600;
+  color: #fff;
 }
 
-.leader-count {
-    color: #b56bff;
+.leaderboard-referrals {
+  white-space: nowrap;
 
-    font-size: 9px;
+  font-size: 10px;
+  font-weight: 800;
 
-    font-weight: 700;
+  color: #c979ff;
+
+  text-shadow:
+  0 0 8px rgba(194, 91, 255, 0.4);
+}
+
+
+/* TOP 1 */
+
+.leaderboard-row:nth-child(1) {
+  min-height: 67px;
+
+  background:
+  radial-gradient(
+  circle at 10% 50%,
+  rgba(255, 190, 60, 0.15),
+  transparent 43%
+  ),
+  rgba(255, 190, 60, 0.035);
+
+  border-color:
+  rgba(255, 198, 73, 0.5);
+
+  box-shadow:
+  0 0 18px rgba(255, 188, 54, 0.1);
+}
+
+.leaderboard-row:nth-child(1)::before {
+  background:
+  linear-gradient(
+  180deg,
+  transparent,
+  #ffd166,
+  transparent
+  );
+
+  box-shadow:
+  0 0 10px #ffd166;
+}
+
+.leaderboard-row:nth-child(1) .leaderboard-rank {
+  width: 38px;
+  height: 38px;
+
+  font-size: 19px;
+
+  background:
+  rgba(255, 190, 60, 0.12);
+
+  box-shadow:
+  0 0 13px rgba(255, 190, 60, 0.2);
+}
+
+.leaderboard-row:nth-child(1) .leaderboard-name {
+  font-size: 14px;
+}
+
+.leaderboard-row:nth-child(1) .leaderboard-referrals {
+  color: #ffd166;
+}
+
+
+/* TOP 2 */
+
+.leaderboard-row:nth-child(2) {
+  min-height: 61px;
+
+  border-color:
+  rgba(210, 220, 235, 0.32);
+
+  background:
+  rgba(210, 220, 235, 0.025);
+
+  box-shadow:
+  0 0 13px rgba(210, 220, 235, 0.05);
+}
+
+.leaderboard-row:nth-child(2) .leaderboard-rank {
+  font-size: 17px;
+
+  background:
+  rgba(210, 220, 235, 0.08);
+}
+
+.leaderboard-row:nth-child(2) .leaderboard-referrals {
+  color: #d8dfeb;
+}
+
+
+/* TOP 3 */
+
+.leaderboard-row:nth-child(3) {
+  min-height: 58px;
+
+  border-color:
+  rgba(198, 112, 255, 0.4);
+
+  background:
+  rgba(180, 70, 255, 0.035);
+
+  box-shadow:
+  0 0 15px rgba(180, 70, 255, 0.08);
+}
+
+.leaderboard-row:nth-child(3) .leaderboard-rank {
+  font-size: 16px;
+
+  background:
+  rgba(190, 80, 255, 0.1);
+}
+
+.leaderboard-row:nth-child(3) .leaderboard-referrals {
+  color: #d17cff;
 }
 
 
@@ -731,121 +778,113 @@
 ========================================================= */
 
 .your-rank-card {
-    width: 100%;
+  position: relative;
 
-    margin-top: 14px;
+  display: flex;
+  align-items: center;
 
-    padding: 15px;
+  gap: 13px;
 
-    display: flex;
+  width: 100%;
 
-    align-items: center;
+  margin: 14px 0;
 
-    gap: 12px;
+  padding: 16px;
 
-    border-radius: 21px;
+  border-radius: 20px;
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(21, 17, 42, .98),
-            rgba(7, 7, 17, .99)
-        );
+  background:
+  radial-gradient(
+  circle at 0% 50%,
+  rgba(170, 60, 255, 0.14),
+  transparent 48%
+  ),
+  rgba(15, 10, 28, 0.96);
 
-    border:
-        1px solid
-        rgba(155, 77, 255, .45);
+  border: 1px solid rgba(177, 70, 255, 0.36);
 
-    box-shadow:
-        0 0 15px
-        rgba(139, 61, 255, .10);
+  box-shadow:
+  0 0 17px rgba(154, 47, 255, 0.08);
 }
 
 .rank-icon {
-    width: 54px;
-    height: 54px;
+  width: 48px;
+  height: 48px;
 
-    min-width: 54px;
+  flex: 0 0 auto;
 
-    display: flex;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    align-items: center;
-    justify-content: center;
+  border-radius: 50%;
 
-    border-radius: 50%;
+  font-size: 25px;
 
-    background:
-        radial-gradient(
-            circle,
-            rgba(151, 66, 255, .40),
-            rgba(57, 18, 120, .24)
-        );
+  color: #d58aff;
 
-    border:
-        1px solid
-        rgba(177, 103, 255, .68);
+  border: 1px solid rgba(207, 116, 255, 0.55);
 
-    color: #d59cff;
+  background:
+  rgba(163, 60, 255, 0.1);
 
-    font-size: 25px;
-
-    box-shadow:
-        0 0 16px
-        rgba(139, 61, 255, .40);
+  box-shadow:
+  0 0 14px rgba(183, 71, 255, 0.2);
 }
 
 .rank-content {
-    flex: 1;
+  flex: 1;
 
-    min-width: 0;
+  min-width: 0;
 }
 
 .rank-content > span {
-    color: #ae88c8;
+  display: block;
 
-    font-size: 10px;
+  font-size: 10px;
+  font-weight: 800;
 
-    font-weight: 700;
+  color: rgba(255, 255, 255, 0.48);
+
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
 .rank-value {
-    display: flex;
+  display: flex;
+  align-items: baseline;
 
-    align-items: baseline;
+  gap: 5px;
 
-    gap: 6px;
+  margin-top: 4px;
 
-    margin-top: 3px;
+  white-space: nowrap;
 }
 
 .rank-value strong {
-    color: #ffffff;
+  font-size: 20px;
+  font-weight: 900;
 
-    font-size: 21px;
-
-    font-weight: 900;
+  color: #fff;
 }
 
 .rank-value b {
-    color: #9850e9;
+  color: #bd69ff;
 }
 
 .rank-value > span {
-    color: #9696a8;
+  font-size: 10px;
 
-    font-size: 10px;
+  color: rgba(255, 255, 255, 0.43);
 }
 
 .rank-arrow {
-    color: #ad5fff;
+  font-size: 27px;
 
-    font-size: 36px;
+  color: #b95cff;
 
-    line-height: 1;
-
-    text-shadow:
-        0 0 13px
-        rgba(139, 61, 255, .60);
+  text-shadow:
+  0 0 10px rgba(190, 76, 255, 0.6);
 }
 
 
@@ -854,96 +893,103 @@
 ========================================================= */
 
 .how-it-works {
-    padding:
-        19px 15px;
+  padding: 18px 17px;
 }
 
 .how-it-works h2 {
-    margin: 0 0 19px;
+  margin: 0 0 19px;
 
-    color: #c28aff;
+  font-size: 19px;
+  font-weight: 900;
 
-    font-size: 17px;
+  color: #d38aff;
 
-    font-weight: 800;
+  text-shadow:
+  0 0 8px rgba(204, 107, 255, 0.35);
 }
 
 .referral-step {
-    display: flex;
+  position: relative;
 
-    align-items: flex-start;
+  display: flex;
+  align-items: flex-start;
 
-    gap: 12px;
+  gap: 12px;
+
+  z-index: 2;
 }
 
 .step-number {
-    width: 31px;
-    height: 31px;
+  width: 35px;
+  height: 35px;
 
-    min-width: 31px;
+  flex: 0 0 auto;
 
-    display: flex;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    align-items: center;
-    justify-content: center;
+  border-radius: 50%;
 
-    border-radius: 50%;
+  font-size: 13px;
+  font-weight: 900;
 
-    background:
-        linear-gradient(
-            135deg,
-            #9d4cff,
-            #5424c4
-        );
+  color: #fff;
 
-    color: #ffffff;
+  background:
+  linear-gradient(
+  145deg,
+  #9d3fff,
+  #6525d8
+  );
 
-    font-size: 12px;
+  border: 1px solid rgba(218, 150, 255, 0.55);
 
-    font-weight: 900;
-
-    box-shadow:
-        0 0 12px
-        rgba(139, 61, 255, .43);
+  box-shadow:
+  0 0 12px rgba(153, 51, 255, 0.35);
 }
 
 .step-content {
-    padding-top: 1px;
+  flex: 1;
+
+  min-width: 0;
+
+  padding-bottom: 5px;
 }
 
 .step-content strong {
-    display: block;
+  display: block;
 
-    color: #eeeeF6;
+  font-size: 13px;
+  line-height: 1.25;
 
-    font-size: 12px;
-
-    font-weight: 800;
+  color: #fff;
 }
 
 .step-content p {
-    margin: 4px 0 0;
+  margin: 5px 0 0;
 
-    color: #9292a5;
+  font-size: 10px;
+  line-height: 1.5;
 
-    font-size: 10px;
-
-    line-height: 1.5;
+  color: rgba(255, 255, 255, 0.43);
 }
 
 .step-connector {
-    width: 1px;
-    height: 17px;
+  width: 1px;
+  height: 21px;
 
-    margin:
-        2px 0
-        2px 15px;
+  margin-left: 17px;
 
-    background:
-        linear-gradient(
-            #8d4cff,
-            rgba(141, 76, 255, .10)
-        );
+  background:
+  linear-gradient(
+  180deg,
+  rgba(174, 70, 255, 0.7),
+  rgba(174, 70, 255, 0.12)
+  );
+
+  box-shadow:
+  0 0 5px rgba(174, 70, 255, 0.35);
 }
 
 
@@ -952,70 +998,63 @@
 ========================================================= */
 
 .invite-more-card {
-    width: 100%;
+  width: 100%;
 
-    margin-top: 14px;
+  display: flex;
+  align-items: center;
 
-    padding: 18px;
+  gap: 14px;
 
-    display: flex;
+  margin-top: 14px;
 
-    align-items: center;
+  padding: 17px;
 
-    gap: 13px;
+  border-radius: 20px;
 
-    border-radius: 21px;
+  background:
+  linear-gradient(
+  145deg,
+  rgba(31, 13, 49, 0.98),
+  rgba(10, 7, 19, 0.98)
+  );
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(32, 16, 56, .98),
-            rgba(8, 7, 18, .99)
-        );
+  border: 1px solid rgba(182, 72, 255, 0.38);
 
-    border:
-        1px solid
-        rgba(155, 77, 255, .38);
-
-    box-shadow:
-        0 0 15px
-        rgba(139, 61, 255, .09);
+  box-shadow:
+  0 0 17px rgba(150, 50, 255, 0.07);
 }
 
 .invite-gift {
-    font-size: 38px;
+  flex: 0 0 auto;
 
-    line-height: 1;
+  font-size: 38px;
 
-    filter:
-        drop-shadow(
-            0 0 10px
-            rgba(174, 76, 255, .60)
-        );
+  filter:
+  drop-shadow(
+  0 0 9px rgba(255, 94, 178, 0.35)
+  );
 }
 
 .invite-more-content {
-    min-width: 0;
+  min-width: 0;
 }
 
 .invite-more-content strong {
-    display: block;
+  display: block;
 
-    color: #ffffff;
+  font-size: 15px;
+  font-weight: 900;
 
-    font-size: 13px;
-
-    font-weight: 800;
+  color: #fff;
 }
 
 .invite-more-content p {
-    margin: 5px 0 0;
+  margin: 5px 0 0;
 
-    color: #9696aa;
+  font-size: 10px;
+  line-height: 1.45;
 
-    font-size: 10px;
-
-    line-height: 1.5;
+  color: rgba(255, 255, 255, 0.43);
 }
 
 
@@ -1024,76 +1063,59 @@
 ========================================================= */
 
 .referral-bottom-space {
-    height: 30px;
+  height: 30px;
 }
 
 
 /* =========================================================
-   SMALL PHONES
+   MOBILE
 ========================================================= */
 
 @media (max-width: 380px) {
 
-    .referral-page {
-        padding-left: 12px;
-        padding-right: 12px;
-    }
+  .referral-page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 
-    .referral-header h1 {
-        font-size: 21px;
-    }
+  .referral-header h1 {
+    font-size: 25px;
+  }
 
-    .referral-big-reward {
-        font-size: 35px;
-    }
+  .referral-big-reward {
+    font-size: 31px;
+  }
 
-    .referral-card {
-        padding: 15px;
-    }
+  .referral-card {
+    padding: 15px;
+  }
 
-    .reward-coin {
-        width: 57px;
-        height: 57px;
+  .reward-coin {
+    width: 52px;
+    height: 52px;
+    font-size: 21px;
+  }
 
-        min-width: 57px;
+  .reward-text strong {
+    font-size: 18px;
+  }
 
-        font-size: 27px;
-    }
+  .leaderboard-heading h2 {
+    font-size: 16px;
+  }
 
-    .reward-text strong {
-        font-size: 22px;
-    }
-
-    .leader-row {
-        grid-template-columns:
-            32px 1fr auto;
-    }
-
-    .leader-count {
-        font-size: 8px;
-    }
 }
 
 
 /* =========================================================
-   VERY SMALL PHONES
+   REDUCED MOTION
 ========================================================= */
 
-@media (max-width: 340px) {
+@media (prefers-reduced-motion: reduce) {
 
-    .referral-big-reward {
-        font-size: 32px;
-    }
+  .referral-button,
+  .leaderboard-row {
+    transition: none;
+  }
 
-    .referral-actions {
-        gap: 7px;
-    }
-
-    .referral-button {
-        font-size: 11px;
-    }
-
-    .referral-stat > strong {
-        font-size: 19px;
-    }
 }

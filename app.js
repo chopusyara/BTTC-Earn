@@ -10,11 +10,11 @@
 const TELEGRAM_USER_FUNCTION =
 "https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/telegram-user";
 
-const START_EARNING_FUNCTION =
-"https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/start-earning";
+const START_Mining_FUNCTION =
+"https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/start-Mining";
 
-const CLAIM_EARNING_FUNCTION =
-"https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/claim-earning";
+const CLAIM_Mining_FUNCTION =
+"https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/claim-Mining";
 
 const PROCESS_REFERRAL_FUNCTION =
 "https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/process-referral";
@@ -108,47 +108,47 @@ document.getElementById(
 
 const startButton =
 document.getElementById(
-  "startEarning"
+  "startMining"
 );
 
 
-const earningButtonText =
+const MiningButtonText =
 document.getElementById(
-  "earningButtonText"
+  "MiningButtonText"
 );
 
 
-const earningStatus =
+const MiningStatus =
 document.getElementById(
-  "earningStatus"
+  "MiningStatus"
 );
 
 
 /* =========================================
-   EARNING SETTINGS
+   Mining SETTINGS
 ========================================= */
 
-const EARNING_DURATION_SECONDS =
+const Mining_DURATION_SECONDS =
 15 * 60;
 
 
-const EARNING_REWARD =
+const Mining_REWARD =
 1000;
 
 
-const EARNING_STORAGE_KEY =
-"bttc_earning_session";
+const Mining_STORAGE_KEY =
+"bttc_Mining_session";
 
 
 let currentUser =
 null;
 
 
-let earningTimer =
+let MiningTimer =
 null;
 
 
-let earningSession =
+let MiningSession =
 null;
 
 
@@ -161,10 +161,10 @@ function setButtonText(
 ) {
 
   if (
-    earningButtonText
+    MiningButtonText
   ) {
 
-    earningButtonText.textContent =
+    MiningButtonText.textContent =
     text;
 
   } else if (
@@ -188,10 +188,10 @@ function setStatus(
 ) {
 
   if (
-    earningStatus
+    MiningStatus
   ) {
 
-    earningStatus.textContent =
+    MiningStatus.textContent =
     text || "";
 
   }
@@ -611,17 +611,17 @@ function updateBTTCBalance(
 
 
 /* =========================================
-   LOCAL EARNING SESSION
+   LOCAL Mining SESSION
 ========================================= */
 
-function saveEarningSession(
+function saveMiningSession(
   session
 ) {
 
   try {
 
     localStorage.setItem(
-      EARNING_STORAGE_KEY,
+      Mining_STORAGE_KEY,
       JSON.stringify(
         session
       )
@@ -632,7 +632,7 @@ function saveEarningSession(
   ) {
 
     console.error(
-      "Unable to save earning session:",
+      "Unable to save Mining session:",
       error
     );
 
@@ -641,13 +641,13 @@ function saveEarningSession(
 }
 
 
-function getSavedEarningSession() {
+function getSavedMiningSession() {
 
   try {
 
     const saved =
     localStorage.getItem(
-      EARNING_STORAGE_KEY
+      Mining_STORAGE_KEY
     );
 
 
@@ -670,7 +670,7 @@ function getSavedEarningSession() {
   ) {
 
     console.error(
-      "Unable to read earning session:",
+      "Unable to read Mining session:",
       error
     );
 
@@ -681,12 +681,12 @@ function getSavedEarningSession() {
 }
 
 
-function clearSavedEarningSession() {
+function clearSavedMiningSession() {
 
   try {
 
     localStorage.removeItem(
-      EARNING_STORAGE_KEY
+      Mining_STORAGE_KEY
     );
 
   } catch (
@@ -694,7 +694,7 @@ function clearSavedEarningSession() {
   ) {
 
     console.error(
-      "Unable to clear earning session:",
+      "Unable to clear Mining session:",
       error
     );
 
@@ -747,14 +747,14 @@ function formatTime(
 function stopTimer() {
 
   if (
-    earningTimer
+    MiningTimer
   ) {
 
     clearInterval(
-      earningTimer
+      MiningTimer
     );
 
-    earningTimer =
+    MiningTimer =
     null;
 
   }
@@ -801,7 +801,7 @@ function showClaimButton() {
 
 
   setButtonText(
-    "CLAIM 1,000 BTTC"
+    "CLAIM BTTC"
   );
 
 
@@ -842,7 +842,7 @@ function showStartButton() {
 
 
   setButtonText(
-    "Start Earning"
+    "Start"
   );
 
 
@@ -888,11 +888,11 @@ function startCountdown(
   }
 
 
-  earningSession =
+  MiningSession =
   session;
 
 
-  saveEarningSession(
+  saveMiningSession(
     session
   );
 
@@ -964,7 +964,7 @@ function startCountdown(
 
 
     setStatus(
-      "Earning in progress..."
+      "Mining in progress..."
     );
 
   }
@@ -973,7 +973,7 @@ function startCountdown(
   update();
 
 
-  earningTimer =
+  MiningTimer =
   setInterval(
     update,
     1000
@@ -983,10 +983,10 @@ function startCountdown(
 
 
 /* =========================================
-   START EARNING
+   START Mining
 ========================================= */
 
-async function startEarning() {
+async function startMining() {
 
   if (
     !tg
@@ -1051,7 +1051,7 @@ async function startEarning() {
 
 
   setStatus(
-    "Starting your 15-minute earning session..."
+    "Mining Started Collect Your Reward after 15 min."
   );
 
 
@@ -1059,7 +1059,7 @@ async function startEarning() {
 
     const response =
     await fetch(
-      START_EARNING_FUNCTION,
+      START_Mining_FUNCTION,
       {
         method: "POST",
 
@@ -1084,7 +1084,7 @@ async function startEarning() {
 
 
     console.log(
-      "start-earning response:",
+      "start-Mining response:",
       result
     );
 
@@ -1097,7 +1097,7 @@ async function startEarning() {
 
       throw new Error(
         result.error ||
-        "Unable to start earning."
+        "Unable to start Mining."
       );
 
     }
@@ -1113,7 +1113,7 @@ async function startEarning() {
   ) {
 
     console.error(
-      "Start earning error:",
+      "Start Mining error:",
       error
     );
 
@@ -1123,7 +1123,7 @@ async function startEarning() {
 
     alert(
       error.message ||
-      "Unable to start earning."
+      "Unable to start Mining."
     );
 
   }
@@ -1132,10 +1132,10 @@ async function startEarning() {
 
 
 /* =========================================
-   CLAIM EARNING
+   CLAIM Mining
 ========================================= */
 
-async function claimEarning() {
+async function claimMining() {
 
   if (
     !tg
@@ -1182,7 +1182,7 @@ async function claimEarning() {
 
 
   setStatus(
-    "Checking your earning session..."
+    "Checking your Mining session..."
   );
 
 
@@ -1190,7 +1190,7 @@ async function claimEarning() {
 
     const response =
     await fetch(
-      CLAIM_EARNING_FUNCTION,
+      CLAIM_Mining_FUNCTION,
       {
         method: "POST",
 
@@ -1215,7 +1215,7 @@ async function claimEarning() {
 
 
     console.log(
-      "claim-earning response:",
+      "claim-Mining response:",
       result
     );
 
@@ -1247,10 +1247,10 @@ async function claimEarning() {
     }
 
 
-    clearSavedEarningSession();
+    clearSavedMiningSession();
 
 
-    earningSession =
+    MiningSession =
     null;
 
 
@@ -1332,7 +1332,7 @@ if (
         "claim"
       ) {
 
-        await claimEarning();
+        await claimMining();
 
         return;
 
@@ -1341,7 +1341,7 @@ if (
 
       const buttonText =
       (
-        earningButtonText
+        MiningButtonText
         ?.textContent ||
         startButton
         .textContent ||
@@ -1355,14 +1355,14 @@ if (
         )
       ) {
 
-        await claimEarning();
+        await claimMining();
 
         return;
 
       }
 
 
-      await startEarning();
+      await startMining();
 
     }
   );
@@ -1371,13 +1371,13 @@ if (
 
 
 /* =========================================
-   RESTORE EARNING SESSION
+   RESTORE Mining SESSION
 ========================================= */
 
-function restoreEarningSession() {
+function restoreMiningSession() {
 
   const savedSession =
-  getSavedEarningSession();
+  getSavedMiningSession();
 
 
   if (
@@ -1404,7 +1404,7 @@ function restoreEarningSession() {
     )
   ) {
 
-    clearSavedEarningSession();
+    clearSavedMiningSession();
 
     showStartButton();
 
@@ -1413,7 +1413,7 @@ function restoreEarningSession() {
   }
 
 
-  earningSession =
+  MiningSession =
   savedSession;
 
 
@@ -2032,10 +2032,10 @@ document.addEventListener(
 
   /*
    * Restore an existing
-   * earning session.
+   * Mining session.
    */
 
-  restoreEarningSession();
+  restoreMiningSession();
 
 })();
 
