@@ -1,358 +1,455 @@
 /* =========================================================
-   BTTC EARN — REFERRAL.JS
-   LINK-ONLY REFERRAL SYSTEM
-   ========================================================= */
+   BTTC EARN — REFERRAL PAGE
+   referral.js
+========================================================= */
 
-const BOT_USERNAME = "BTTC_Earnbot";
+(function () {
 
-const REFERRAL_REWARD = 3333;
-
-const SUPABASE_FUNCTION_BASE =
-"https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1";
-
-const PROCESS_REFERRAL_FUNCTION =
-`${SUPABASE_FUNCTION_BASE}/process-referral`;
-
-const REFERRAL_DATA_FUNCTION =
-`${SUPABASE_FUNCTION_BASE}/referral-data`;
+  "use strict";
 
 
-/* =========================================================
-   TELEGRAM
-   ========================================================= */
+  /* =====================================================
+       SETTINGS
+    ===================================================== */
 
-function getTelegramWebApp() {
+  const REFERRAL_REWARD = 3333;
 
-  if (
-    window.Telegram &&
-    window.Telegram.WebApp
-  ) {
-    return window.Telegram.WebApp;
-  }
-
-  return null;
-}
+  const BOT_USERNAME = "BTTC_Earnbot";
 
 
-/* =========================================================
-   GET TELEGRAM USER
-   ========================================================= */
+  /* =====================================================
+       TELEGRAM
+    ===================================================== */
 
-function getTelegramUser() {
-
-  const telegram =
-  getTelegramWebApp();
-
-  if (!telegram) {
-    return null;
-  }
-
-  return (
-    telegram.initDataUnsafe &&
-    telegram.initDataUnsafe.user
-  )
-  ? telegram.initDataUnsafe.user: null;
-}
+  const tg =
+  window.Telegram &&
+  window.Telegram.WebApp
+  ? window.Telegram.WebApp: null;
 
 
-/* =========================================================
-   CREATE REFERRAL LINK
-   ========================================================= */
+  /* =====================================================
+       ELEMENTS
+    ===================================================== */
 
-function createReferralLink(
-  telegramId
-) {
+  const referralLinkEl =
+  document.getElementById("referralLink");
 
-  return (
-    `https://t.me/${BOT_USERNAME}` +
-    `?startapp=${telegramId}`
+  const copyButton =
+  document.getElementById("copyReferral");
+
+  const shareButton =
+  document.getElementById("shareReferral");
+
+  const totalReferralsEl =
+  document.getElementById("totalReferrals");
+
+  const totalEarningsEl =
+  document.getElementById(
+    "totalReferralEarnings"
   );
 
-}
-
-
-/* =========================================================
-   GET REFERRAL LINK ELEMENT
-   ========================================================= */
-
-function getReferralLinkElement() {
-
-  return document.getElementById(
-    "referralLink"
+  const rankingEl =
+  document.getElementById(
+    "yourReferralRank"
   );
 
-}
+  const referralCountEl =
+  document.getElementById(
+    "yourReferralCount"
+  );
 
-
-/* =========================================================
-   DISPLAY PERSONAL REFERRAL LINK
-   ========================================================= */
-
-function displayReferralLink() {
-
-  const element =
-  getReferralLinkElement();
-
-
-  if (!element) {
-
-    console.log(
-      "Referral link element not found yet."
-    );
-
-    return false;
-
-  }
-
-
-  const user =
-  getTelegramUser();
-
-
-  if (!user) {
-
-    element.textContent =
-    "Open BTTC Earn inside Telegram";
-
-    console.log(
-      "Telegram user not available yet."
-    );
-
-    return false;
-
-  }
-
-
-  const link =
-  createReferralLink(
-    user.id
+  const leaderboardEl =
+  document.getElementById(
+    "leaderboardList"
   );
 
 
-  /*
-     * IMPORTANT:
-     *
-     * If referralLink is an input,
-     * put the link in .value.
-     *
-     * If it is a div/span,
-     * use .textContent.
-     */
+  /* =====================================================
+       TELEGRAM INITIALIZATION
+    ===================================================== */
 
-  if (
-    element.tagName === "INPUT" ||
-    element.tagName === "TEXTAREA"
-  ) {
+  function initializeTelegram() {
 
-    element.value = link;
+    if (!tg) {
+      return;
+    }
 
-  } else {
+    try {
 
-    element.textContent = link;
+      tg.ready();
 
-  }
+      tg.expand();
 
+      if (
+        typeof tg.setHeaderColor ===
+        "function"
+      ) {
 
-  element.setAttribute(
-    "data-referral-link",
-    link
-  );
+        tg.setHeaderColor(
+          "#05050d"
+        );
 
+      }
 
-  element.setAttribute(
-    "title",
-    link
-  );
+      if (
+        typeof tg.setBackgroundColor ===
+        "function"
+      ) {
 
+        tg.setBackgroundColor(
+          "#05050d"
+        );
 
-  console.log(
-    "BTTC referral link:",
-    link
-  );
+      }
 
+    } catch (error) {
 
-  return true;
-
-}
-
-
-/* =========================================================
-   COPY REFERRAL LINK
-   ========================================================= */
-
-async function copyReferralLink() {
-
-  const user =
-  getTelegramUser();
-
-
-  if (!user) {
-
-    showReferralMessage(
-      "Open BTTC Earn inside Telegram first.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  const link =
-  createReferralLink(
-    user.id
-  );
-
-
-  try {
-
-    await navigator.clipboard.writeText(
-      link
-    );
-
-
-    showReferralMessage(
-      "Referral link copied!",
-      "success"
-    );
-
-
-    const telegram =
-    getTelegramWebApp();
-
-
-    if (
-      telegram &&
-      telegram.HapticFeedback
-    ) {
-
-      telegram.HapticFeedback.notificationOccurred(
-        "success"
+      console.log(
+        "Telegram initialization error:",
+        error
       );
 
     }
 
-  } catch (error) {
+  }
 
-    console.error(
-      "Clipboard error:",
-      error
-    );
+
+  initializeTelegram();
+
+
+  /* =====================================================
+       GET TELEGRAM USER
+    ===================================================== */
+
+  function getTelegramUser() {
+
+    if (
+      tg &&
+      tg.initDataUnsafe &&
+      tg.initDataUnsafe.user
+    ) {
+
+      return tg.initDataUnsafe.user;
+
+    }
+
+    return null;
+
+  }
+
+
+  /* =====================================================
+       GET TELEGRAM USER ID
+    ===================================================== */
+
+  function getTelegramUserId() {
+
+    const user =
+    getTelegramUser();
+
+
+    if (
+      user &&
+      user.id
+    ) {
+
+      return String(
+        user.id
+      );
+
+    }
+
+
+    return null;
+
+  }
+
+
+  /* =====================================================
+       CREATE REFERRAL LINK
+    ===================================================== */
+
+  function createReferralLink() {
+
+    const userId =
+    getTelegramUserId();
+
+
+    if (!userId) {
+
+      return null;
+
+    }
 
 
     /*
-         * Fallback
+         * No referral code is created.
+         *
+         * Telegram user ID is used directly
+         * as the start parameter.
          */
 
-    const textarea =
-    document.createElement(
-      "textarea"
+    return (
+      "https://t.me/" +
+      BOT_USERNAME +
+      "?start=" +
+      encodeURIComponent(
+        userId
+      )
     );
 
-
-    textarea.value =
-    link;
+  }
 
 
-    textarea.style.position =
-    "fixed";
+  /* =====================================================
+       LOAD REFERRAL LINK
+    ===================================================== */
 
-    textarea.style.left =
-    "-9999px";
+  function loadReferralLink() {
+
+    if (!referralLinkEl) {
+      return;
+    }
 
 
-    document.body.appendChild(
-      textarea
-    );
+    let attempts = 0;
+
+    const maxAttempts = 20;
 
 
-    textarea.select();
+    function tryLoad() {
+
+      const link =
+      createReferralLink();
+
+
+      if (link) {
+
+        referralLinkEl.textContent =
+        link;
+
+        referralLinkEl.title =
+        link;
+
+        referralLinkEl.dataset.link =
+        link;
+
+        return;
+
+      }
+
+
+      attempts++;
+
+
+      if (
+        attempts >=
+        maxAttempts
+      ) {
+
+        referralLinkEl.textContent =
+        "Open BTTC Earn inside Telegram";
+
+        referralLinkEl.title =
+        "Telegram user information is unavailable";
+
+        return;
+
+      }
+
+
+      setTimeout(
+        tryLoad,
+        250
+      );
+
+    }
+
+
+    tryLoad();
+
+  }
+
+
+  /* =====================================================
+       COPY
+    ===================================================== */
+
+  async function copyReferralLink() {
+
+    const link =
+    createReferralLink();
+
+
+    if (!link) {
+
+      showMessage(
+        "Referral link is unavailable. Please open BTTC Earn inside Telegram."
+      );
+
+      return;
+
+    }
 
 
     try {
 
-      document.execCommand(
-        "copy"
+      if (
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+      ) {
+
+        await navigator.clipboard.writeText(
+          link
+        );
+
+      } else {
+
+        const textarea =
+        document.createElement(
+          "textarea"
+        );
+
+        textarea.value =
+        link;
+
+        textarea.style.position =
+        "fixed";
+
+        textarea.style.opacity =
+        "0";
+
+        document.body.appendChild(
+          textarea
+        );
+
+        textarea.select();
+
+        document.execCommand(
+          "copy"
+        );
+
+        textarea.remove();
+
+      }
+
+
+      hapticSuccess();
+
+
+      showTemporaryText(
+        copyButton,
+        "✓ COPIED"
       );
 
 
-      showReferralMessage(
-        "Referral link copied!",
-        "success"
+      if (
+        tg &&
+        typeof tg.showAlert ===
+        "function"
+      ) {
+
+        tg.showAlert(
+          "Referral link copied! 📋"
+        );
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Copy error:",
+        error
       );
 
-    } catch (copyError) {
-
-      showReferralMessage(
-        "Unable to copy referral link.",
-        "error"
+      showMessage(
+        "Unable to copy the referral link."
       );
 
     }
 
-
-    textarea.remove();
-
-  }
-
-}
-
-
-/* =========================================================
-   SHARE REFERRAL LINK
-   ========================================================= */
-
-function shareReferralLink() {
-
-  const user =
-  getTelegramUser();
-
-
-  if (!user) {
-
-    showReferralMessage(
-      "Open BTTC Earn inside Telegram first.",
-      "error"
-    );
-
-    return;
-
   }
 
 
-  const link =
-  createReferralLink(
-    user.id
-  );
+  /* =====================================================
+       SHARE
+    ===================================================== */
+
+  function shareReferralLink() {
+
+    const link =
+    createReferralLink();
 
 
-  const text =
-  "🚀 Join BTTC Earn and start earning BTTC!";
+    if (!link) {
+
+      showMessage(
+        "Referral link is unavailable. Please open BTTC Earn inside Telegram."
+      );
+
+      return;
+
+    }
 
 
-  const shareUrl =
-  "https://t.me/share/url" +
-  "?url=" +
-  encodeURIComponent(link) +
-  "&text=" +
-  encodeURIComponent(text);
+    const text =
+    "🚀 Join BTTC Earn and start earning BTTC!\n\n" +
+    "Join using my referral link.";
 
 
-  const telegram =
-  getTelegramWebApp();
-
-
-  if (
-    telegram &&
-    typeof telegram.openTelegramLink ===
-    "function"
-  ) {
-
-    telegram.openTelegramLink(
-      shareUrl
+    const shareUrl =
+    "https://t.me/share/url" +
+    "?url=" +
+    encodeURIComponent(
+      link
+    ) +
+    "&text=" +
+    encodeURIComponent(
+      text
     );
 
-  } else {
+
+    hapticLight();
+
+
+    if (
+      tg &&
+      typeof tg.openTelegramLink ===
+      "function"
+    ) {
+
+      tg.openTelegramLink(
+        shareUrl
+      );
+
+      return;
+
+    }
+
+
+    if (
+      navigator.share
+    ) {
+
+      navigator.share({
+
+        title:
+        "BTTC Earn",
+
+        text:
+        text,
+
+        url:
+        link
+
+      }).catch(
+        () => {}
+      );
+
+      return;
+
+    }
+
 
     window.open(
       shareUrl,
@@ -361,72 +458,95 @@ function shareReferralLink() {
 
   }
 
-}
 
+  /* =====================================================
+       TEMPORARY BUTTON TEXT
+    ===================================================== */
 
-/* =========================================================
-   PROCESS INCOMING REFERRAL
-   ========================================================= */
-
-async function processIncomingReferral() {
-
-  const telegram =
-  getTelegramWebApp();
-
-
-  const user =
-  getTelegramUser();
-
-
-  if (
-    !telegram ||
-    !user
+  function showTemporaryText(
+    button,
+    text
   ) {
 
-    return;
+    if (!button) {
+      return;
+    }
 
-  }
+
+    const original =
+    button.textContent;
 
 
-  if (!telegram.initData) {
+    button.textContent =
+    text;
 
-    console.log(
-      "Telegram initData unavailable."
+
+    setTimeout(
+      function () {
+
+        button.textContent =
+        original;
+
+      },
+      1500
     );
 
-    return;
+  }
+
+
+  /* =====================================================
+       MESSAGE
+    ===================================================== */
+
+  function showMessage(
+    message
+  ) {
+
+    if (
+      tg &&
+      typeof tg.showAlert ===
+      "function"
+    ) {
+
+      tg.showAlert(
+        message
+      );
+
+    } else {
+
+      alert(
+        message
+      );
+
+    }
 
   }
 
 
-  let startParameter =
-  telegram.initDataUnsafe &&
-  telegram.initDataUnsafe.start_param;
+  /* =====================================================
+       HAPTIC
+    ===================================================== */
 
-
-  /*
-     * URL fallback
-     */
-
-  if (!startParameter) {
+  function hapticLight() {
 
     try {
 
-      const url =
-      new URL(
-        window.location.href
-      );
+      if (
+        tg &&
+        tg.HapticFeedback
+      ) {
 
+        tg.HapticFeedback
+        .impactOccurred(
+          "light"
+        );
 
-      startParameter =
-      url.searchParams.get(
-        "startapp"
-      );
+      }
 
     } catch (error) {
 
-      console.error(
-        "URL parameter error:",
+      console.log(
+        "Haptic error:",
         error
       );
 
@@ -435,729 +555,143 @@ async function processIncomingReferral() {
   }
 
 
-  if (!startParameter) {
+  function hapticSuccess() {
 
-    return;
+    try {
 
-  }
-
-
-  const referrerTelegramId =
-  Number(
-    startParameter
-  );
-
-
-  if (
-    !Number.isSafeInteger(
-      referrerTelegramId
-    ) ||
-    referrerTelegramId <= 0
-  ) {
-
-    console.log(
-      "Invalid referral parameter."
-    );
-
-    return;
-
-  }
-
-
-  /*
-     * Self referral
-     */
-
-  if (
-    referrerTelegramId ===
-    Number(user.id)
-  ) {
-
-    console.log(
-      "Self referral blocked."
-    );
-
-    return;
-
-  }
-
-
-  const attemptKey =
-  `bttc_referral_${user.id}_${referrerTelegramId}`;
-
-
-  if (
-    localStorage.getItem(
-      attemptKey
-    )
-  ) {
-
-    return;
-
-  }
-
-
-  try {
-
-    const response =
-    await fetch(
-      PROCESS_REFERRAL_FUNCTION,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type":
-          "application/json"
-        },
-
-        body: JSON.stringify({
-
-          initData:
-          telegram.initData,
-
-          referrerTelegramId:
-          referrerTelegramId
-
-        })
-
-      }
-    );
-
-
-    const result =
-    await response.json();
-
-
-    console.log(
-      "Referral processing:",
-      result
-    );
-
-
-    localStorage.setItem(
-      attemptKey,
-      "1"
-    );
-
-
-    if (
-      response.ok &&
-      result.success
-    ) {
-
-      showReferralMessage(
-        "🎉 Referral successful! +3,333 BTTC",
-        "success"
-      );
-
-
-      await loadReferralData();
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      "Referral processing error:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   LOAD REFERRAL DATA
-   ========================================================= */
-
-async function loadReferralData() {
-
-  const user =
-  getTelegramUser();
-
-
-  const telegram =
-  getTelegramWebApp();
-
-
-  if (
-    !user ||
-    !telegram
-  ) {
-
-    return;
-
-  }
-
-
-  try {
-
-    const response =
-    await fetch(
-      REFERRAL_DATA_FUNCTION,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type":
-          "application/json"
-        },
-
-        body: JSON.stringify({
-
-          initData:
-          telegram.initData,
-
-          telegramId:
-          user.id
-
-        })
-
-      }
-    );
-
-
-    const result =
-    await response.json();
-
-
-    console.log(
-      "Referral data:",
-      result
-    );
-
-
-    if (
-      !response.ok ||
-      !result.success
-    ) {
-
-      console.error(
-        result.error ||
-        "Referral data failed"
-      );
-
-      return;
-
-    }
-
-
-    updateReferralStatistics(
-      result
-    );
-
-
-    updateLeaderboard(
-      result.leaderboard || []
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      "Referral data error:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   UPDATE STATISTICS
-   ========================================================= */
-
-function updateReferralStatistics(
-  data
-) {
-
-  const referrals =
-  Number(
-    data.total_referrals || 0
-  );
-
-
-  const earnings =
-  Number(
-    data.total_earnings || 0
-  );
-
-
-  const rank =
-  data.your_rank || null;
-
-
-  const totalReferrals =
-  document.getElementById(
-    "totalReferrals"
-  );
-
-
-  const totalEarnings =
-  document.getElementById(
-    "totalReferralEarnings"
-  );
-
-
-  const yourRank =
-  document.getElementById(
-    "yourReferralRank"
-  );
-
-
-  const yourCount =
-  document.getElementById(
-    "yourReferralCount"
-  );
-
-
-  if (totalReferrals) {
-
-    totalReferrals.textContent =
-    referrals.toLocaleString(
-      "en-IN"
-    );
-
-  }
-
-
-  if (totalEarnings) {
-
-    totalEarnings.textContent =
-    earnings.toLocaleString(
-      "en-IN"
-    );
-
-  }
-
-
-  if (yourRank) {
-
-    yourRank.textContent =
-    rank
-    ? `#${rank}`: "#--";
-
-  }
-
-
-  if (yourCount) {
-
-    yourCount.textContent =
-    referrals.toLocaleString(
-      "en-IN"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   LEADERBOARD
-   ========================================================= */
-
-function updateLeaderboard(
-  leaderboard
-) {
-
-  const container =
-  document.getElementById(
-    "leaderboardList"
-  );
-
-
-  if (!container) {
-    return;
-  }
-
-
-  if (
-    !Array.isArray(
-      leaderboard
-    ) ||
-    leaderboard.length === 0
-  ) {
-
-    container.innerHTML = `
-    <div class="leaderboard-loading">
-    No referral leaders yet.
-    </div>
-    `;
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-  leaderboard
-  .slice(0, 10)
-  .map(
-    (
-      item,
-      index
-    ) => {
-
-      const rank =
-      Number(
-        item.rank ||
-        index + 1
-      );
-
-
-      const name =
-      escapeHtml(
-        item.first_name ||
-        item.username ||
-        "BTTC User"
-      );
-
-
-      const referrals =
-      Number(
-        item.referrals || 0
-      );
-
-
-      let medal;
-
-
-      if (rank === 1) {
-
-        medal = "🥇";
-
-      } else if (
-        rank === 2
+      if (
+        tg &&
+        tg.HapticFeedback
       ) {
 
-        medal = "🥈";
-
-      } else if (
-        rank === 3
-      ) {
-
-        medal = "🥉";
-
-      } else {
-
-        medal =
-        rank;
+        tg.HapticFeedback
+        .notificationOccurred(
+          "success"
+        );
 
       }
 
+    } catch (error) {
 
-      return `
-      <div class="leaderboard-item">
-
-      <div class="leaderboard-position">
-      ${medal}
-      </div>
-
-      <div class="leaderboard-user">
-      ${name}
-      </div>
-
-      <div class="leaderboard-referrals">
-      ${referrals}
-      </div>
-
-      </div>
-      `;
+      console.log(
+        "Haptic error:",
+        error
+      );
 
     }
-  )
-  .join("");
 
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-   ========================================================= */
-
-function escapeHtml(
-  value
-) {
-
-  return String(value)
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-  .replace(
-    /</g,
-    "&lt;"
-  )
-  .replace(
-    />/g,
-    "&gt;"
-  )
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-  .replace(
-    /'/g,
-    "&#039;"
-  );
-
-}
-
-
-/* =========================================================
-   TOAST MESSAGE
-   ========================================================= */
-
-function showReferralMessage(
-  message,
-  type
-) {
-
-  const old =
-  document.querySelector(
-    ".referral-toast"
-  );
-
-
-  if (old) {
-    old.remove();
   }
 
 
-  const toast =
-  document.createElement(
-    "div"
-  );
+  /* =====================================================
+       BUTTON EVENTS
+    ===================================================== */
 
-
-  toast.className =
-  `referral-toast ${type || ""}`;
-
-
-  toast.textContent =
-  message;
-
-
-  document.body.appendChild(
-    toast
-  );
-
-
-  setTimeout(
-    () => {
-
-      toast.classList.add(
-        "hide"
-      );
-
-
-      setTimeout(
-        () => {
-
-          toast.remove();
-
-        },
-        300
-      );
-
-    },
-    2500
-  );
-
-}
-
-
-/* =========================================================
-   CONNECT BUTTONS
-   ========================================================= */
-
-function connectReferralButtons() {
-
-  const copyButton =
-  document.getElementById(
-    "copyReferral"
-  );
-
-
-  const shareButton =
-  document.getElementById(
-    "shareReferral"
-  );
-
-
-  if (
-    copyButton &&
-    !copyButton.dataset.connected
-  ) {
+  if (copyButton) {
 
     copyButton.addEventListener(
       "click",
       copyReferralLink
     );
 
-
-    copyButton.dataset.connected =
-    "true";
-
   }
 
 
-  if (
-    shareButton &&
-    !shareButton.dataset.connected
-  ) {
+  if (shareButton) {
 
     shareButton.addEventListener(
       "click",
       shareReferralLink
     );
 
-
-    shareButton.dataset.connected =
-    "true";
-
   }
 
-}
+
+  /* =====================================================
+       INITIAL STATISTICS
+    ===================================================== */
+
+  function initializeStats() {
+
+    if (totalReferralsEl) {
+
+      totalReferralsEl.textContent =
+      "0";
+
+    }
 
 
-/* =========================================================
-   INITIALIZE REFERRAL PAGE
-   ========================================================= */
+    if (totalEarningsEl) {
 
-async function initializeReferralPage() {
+      totalEarningsEl.textContent =
+      "0";
 
-  console.log(
-    "Initializing BTTC Referral page..."
-  );
+    }
 
 
-  const telegram =
-  getTelegramWebApp();
+    if (rankingEl) {
+
+      rankingEl.textContent =
+      "#--";
+
+    }
 
 
-  if (telegram) {
+    if (referralCountEl) {
 
-    try {
+      referralCountEl.textContent =
+      "0";
 
-      telegram.ready();
-      telegram.expand();
+    }
 
-    } catch (error) {
 
-      console.error(
-        "Telegram initialization:",
-        error
-      );
+    if (leaderboardEl) {
+
+      leaderboardEl.innerHTML =
+
+      '<div class="leaderboard-loading">' +
+      'No leaderboard data yet.' +
+      '</div>';
 
     }
 
   }
 
 
-  /*
-     * Wait briefly because the Referral
-     * HTML may be injected dynamically.
-     */
+  /* =====================================================
+       START
+    ===================================================== */
 
-  let attempts = 0;
+  function initializeReferralPage() {
 
+    initializeTelegram();
 
-  const waitForPage =
-  setInterval(
-    async () => {
+    initializeStats();
 
-      attempts++;
+    loadReferralLink();
 
-
-      const linkElement =
-      getReferralLinkElement();
+  }
 
 
-      const user =
-      getTelegramUser();
+  initializeReferralPage();
 
 
-      connectReferralButtons();
+  /* =====================================================
+       DEBUG
+    ===================================================== */
+
+  window.BTTCReferral = {
+
+    getUserId:
+    getTelegramUserId,
+
+    getLink:
+    createReferralLink,
+
+    reload:
+    loadReferralLink
+
+  };
 
 
-      if (
-        linkElement &&
-        user
-      ) {
-
-        clearInterval(
-          waitForPage
-        );
-
-
-        /*
-                     * THIS IS THE IMPORTANT PART
-                     */
-
-        displayReferralLink();
-
-
-        await processIncomingReferral();
-
-
-        await loadReferralData();
-
-
-        console.log(
-          "Referral page initialized successfully."
-        );
-
-
-        return;
-
-      }
-
-
-      /*
-                 * Stop after 10 seconds.
-                 */
-
-      if (
-        attempts >= 50
-      ) {
-
-        clearInterval(
-          waitForPage
-        );
-
-
-        console.log(
-          "Referral page initialization timed out."
-        );
-
-      }
-
-    },
-    200
-  );
-
-}
-
-
-/* =========================================================
-   START
-   ========================================================= */
-
-initializeReferralPage();
-
-
-/*
- * Expose initialization globally.
- *
- * Your main app can call this whenever
- * the Referral page is opened.
- */
-
-window.initializeReferralPage =
-initializeReferralPage;
-
-window.displayReferralLink =
-displayReferralLink;
+})();
