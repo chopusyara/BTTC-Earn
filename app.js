@@ -396,7 +396,7 @@ function showClaimButton() {
 
   setClaimMode(true);
 
-  setButtonText("CLAIM 1,000 BTTC");
+  setButtonText("CLAIM BTTC");
 
   if (startButton) {
     startButton.disabled = false;
@@ -502,7 +502,7 @@ async function startEarning() {
 
   setClaimMode(false);
 
-  setButtonText("Starting...");
+  setButtonText("Mining...");
 
   try {
     const response = await fetch(START_EARNING_FUNCTION, {
@@ -563,7 +563,7 @@ async function claimEarning() {
     startButton.disabled = true;
   }
 
-  setButtonText("Claiming...");
+  setButtonText("+3333 BTTC");
 
   try {
     const response = await fetch(CLAIM_EARNING_FUNCTION, {
