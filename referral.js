@@ -12,9 +12,14 @@
        SETTINGS
     ===================================================== */
 
-  const REFERRAL_REWARD = 3333;
+  const BOT_USERNAME =
+  "BTTC_Earnbot";
 
-  const BOT_USERNAME = "BTTC_Earnbot";
+  const REFERRAL_REWARD =
+  3333;
+
+  const REFERRAL_STATS_FUNCTION =
+  "https://fjhygcclzhvwebmrtbho.supabase.co/functions/v1/referral-stats";
 
 
   /* =====================================================
@@ -32,16 +37,24 @@
     ===================================================== */
 
   const referralLinkEl =
-  document.getElementById("referralLink");
+  document.getElementById(
+    "referralLink"
+  );
 
   const copyButton =
-  document.getElementById("copyReferral");
+  document.getElementById(
+    "copyReferral"
+  );
 
   const shareButton =
-  document.getElementById("shareReferral");
+  document.getElementById(
+    "shareReferral"
+  );
 
   const totalReferralsEl =
-  document.getElementById("totalReferrals");
+  document.getElementById(
+    "totalReferrals"
+  );
 
   const totalEarningsEl =
   document.getElementById(
@@ -118,34 +131,13 @@
 
 
   /* =====================================================
-       GET TELEGRAM USER
-    ===================================================== */
-
-  function getTelegramUser() {
-
-    if (
-      tg &&
-      tg.initDataUnsafe &&
-      tg.initDataUnsafe.user
-    ) {
-
-      return tg.initDataUnsafe.user;
-
-    }
-
-    return null;
-
-  }
-
-
-  /* =====================================================
-       GET TELEGRAM USER ID
+       TELEGRAM USER ID
     ===================================================== */
 
   function getTelegramUserId() {
 
     const user =
-    getTelegramUser();
+    tg?.initDataUnsafe?.user;
 
 
     if (
@@ -166,7 +158,7 @@
 
 
   /* =====================================================
-       CREATE REFERRAL LINK
+       REFERRAL LINK
     ===================================================== */
 
   function createReferralLink() {
@@ -181,13 +173,6 @@
 
     }
 
-
-    /*
-         * No referral code is created.
-         *
-         * Telegram user ID is used directly
-         * as the start parameter.
-         */
 
     return (
       "https://t.me/" +
@@ -272,7 +257,409 @@
 
 
   /* =====================================================
-       COPY
+       LOAD REAL REFERRAL STATISTICS
+    ===================================================== */
+
+  async function loadReferralStats() {
+
+    if (
+      !tg ||
+      !tg.initData
+    ) {
+
+      console.log(
+        "Referral stats: Telegram initData unavailable."
+      );
+
+      return;
+
+    }
+
+
+    /*
+         * Keep the loading state while
+         * the server request is running.
+         */
+
+    if (
+      leaderboardEl
+    ) {
+
+      leaderboardEl.innerHTML =
+      '<div class="leaderboard-loading">' +
+      'Loading leaderboard...' +
+      '</div>';
+
+    }
+
+
+    try {
+
+      const response =
+      await fetch(
+        REFERRAL_STATS_FUNCTION,
+        {
+          method:
+          "POST",
+
+          headers: {
+            "Content-Type":
+            "application/json"
+          },
+
+          body:
+          JSON.stringify({
+
+            initData:
+            tg.initData
+
+          })
+
+        }
+      );
+
+
+      const result =
+      await response.json();
+
+
+      console.log(
+        "referral-stats response:",
+        result
+      );
+
+
+      if (
+        !response.ok ||
+        !result.success
+      ) {
+
+        throw new Error(
+          result.error ||
+          "Unable to load referral statistics."
+        );
+
+      }
+
+
+      /*
+             * TOTAL REFERRALS
+             */
+
+      const totalReferrals =
+      Number(
+        result.total_referrals ||
+        0
+      );
+
+
+      if (
+        totalReferralsEl
+      ) {
+
+        totalReferralsEl.textContent =
+        totalReferrals.toLocaleString(
+          "en-IN"
+        );
+
+      }
+
+
+      /*
+             * TOTAL EARNINGS
+             */
+
+      const totalEarnings =
+      Number(
+        result.total_earnings ||
+        (
+          totalReferrals *
+          REFERRAL_REWARD
+        )
+      );
+
+
+      if (
+        totalEarningsEl
+      ) {
+
+        totalEarningsEl.textContent =
+        totalEarnings.toLocaleString(
+          "en-IN"
+        ) +
+        " BTTC";
+
+      }
+
+
+      /*
+             * YOUR REFERRALS
+             */
+
+      const yourReferrals =
+      Number(
+        result.your_referrals ??
+        totalReferrals
+      );
+
+
+      if (
+        referralCountEl
+      ) {
+
+        referralCountEl.textContent =
+        yourReferrals.toLocaleString(
+          "en-IN"
+        ) +
+        " Referrals";
+
+      }
+
+
+      /*
+             * YOUR RANK
+             */
+
+      const rank =
+      result.your_rank;
+
+
+      if (
+        rankingEl
+      ) {
+
+        if (
+          rank ===
+          null ||
+          rank ===
+          undefined
+        ) {
+
+          rankingEl.textContent =
+          "#--";
+
+        } else {
+
+          rankingEl.textContent =
+          "#" +
+          Number(
+            rank
+          ).toLocaleString(
+            "en-IN"
+          );
+
+        }
+
+      }
+
+
+      /*
+             * LEADERBOARD
+             */
+
+      renderLeaderboard(
+        result.leaderboard ||
+        []
+      );
+
+
+    } catch (
+      error
+    ) {
+
+      console.error(
+        "Referral statistics error:",
+        error
+      );
+
+
+      if (
+        leaderboardEl
+      ) {
+
+        leaderboardEl.innerHTML =
+        '<div class="leaderboard-loading">' +
+        'Unable to load leaderboard.' +
+        '</div>';
+
+      }
+
+    }
+
+  }
+
+
+  /* =====================================================
+       RENDER TOP 10 LEADERBOARD
+    ===================================================== */
+
+  function renderLeaderboard(
+    leaderboard
+  ) {
+
+    if (
+      !leaderboardEl
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      !Array.isArray(
+        leaderboard
+      ) ||
+      leaderboard.length ===
+      0
+    ) {
+
+      leaderboardEl.innerHTML =
+      '<div class="leaderboard-loading">' +
+      'No referral leaders yet.' +
+      '</div>';
+
+      return;
+
+    }
+
+
+    leaderboardEl.innerHTML =
+    "";
+
+
+    leaderboard.forEach(
+      function (
+        player
+      ) {
+
+        const row =
+        document.createElement(
+          "div"
+        );
+
+
+        row.className =
+        "leaderboard-row";
+
+
+        const rank =
+        document.createElement(
+          "div"
+        );
+
+
+        rank.className =
+        "leaderboard-rank";
+
+
+        const rankNumber =
+        Number(
+          player.rank ||
+          0
+        );
+
+
+        if (
+          rankNumber ===
+          1
+        ) {
+
+          rank.textContent =
+          "🥇";
+
+        } else if (
+          rankNumber ===
+          2
+        ) {
+
+          rank.textContent =
+          "🥈";
+
+        } else if (
+          rankNumber ===
+          3
+        ) {
+
+          rank.textContent =
+          "🥉";
+
+        } else {
+
+          rank.textContent =
+          String(
+            rankNumber
+          );
+
+        }
+
+
+        const name =
+        document.createElement(
+          "div"
+        );
+
+
+        name.className =
+        "leaderboard-name";
+
+
+        name.textContent =
+        player.name ||
+        "BTTC User";
+
+
+        const referrals =
+        document.createElement(
+          "div"
+        );
+
+
+        referrals.className =
+        "leaderboard-referrals";
+
+
+        const count =
+        Number(
+          player.referrals ||
+          0
+        );
+
+
+        referrals.textContent =
+        count.toLocaleString(
+          "en-IN"
+        ) +
+        " Referrals";
+
+
+        row.appendChild(
+          rank
+        );
+
+
+        row.appendChild(
+          name
+        );
+
+
+        row.appendChild(
+          referrals
+        );
+
+
+        leaderboardEl.appendChild(
+          row
+        );
+
+      }
+    );
+
+  }
+
+
+  /* =====================================================
+       COPY REFERRAL LINK
     ===================================================== */
 
   async function copyReferralLink() {
@@ -310,24 +697,31 @@
           "textarea"
         );
 
+
         textarea.value =
         link;
+
 
         textarea.style.position =
         "fixed";
 
+
         textarea.style.opacity =
         "0";
+
 
         document.body.appendChild(
           textarea
         );
 
+
         textarea.select();
+
 
         document.execCommand(
           "copy"
         );
+
 
         textarea.remove();
 
@@ -343,24 +737,15 @@
       );
 
 
-      if (
-        tg &&
-        typeof tg.showAlert ===
-        "function"
-      ) {
-
-        tg.showAlert(
-          "Referral link copied! 📋"
-        );
-
-      }
-
-    } catch (error) {
+    } catch (
+      error
+    ) {
 
       console.error(
         "Copy error:",
         error
       );
+
 
       showMessage(
         "Unable to copy the referral link."
@@ -372,7 +757,7 @@
 
 
   /* =====================================================
-       SHARE
+       SHARE REFERRAL LINK
     ===================================================== */
 
   function shareReferralLink() {
@@ -543,14 +928,7 @@
 
       }
 
-    } catch (error) {
-
-      console.log(
-        "Haptic error:",
-        error
-      );
-
-    }
+    } catch (_) {}
 
   }
 
@@ -571,14 +949,7 @@
 
       }
 
-    } catch (error) {
-
-      console.log(
-        "Haptic error:",
-        error
-      );
-
-    }
+    } catch (_) {}
 
   }
 
@@ -587,7 +958,9 @@
        BUTTON EVENTS
     ===================================================== */
 
-  if (copyButton) {
+  if (
+    copyButton
+  ) {
 
     copyButton.addEventListener(
       "click",
@@ -597,7 +970,9 @@
   }
 
 
-  if (shareButton) {
+  if (
+    shareButton
+  ) {
 
     shareButton.addEventListener(
       "click",
@@ -608,67 +983,27 @@
 
 
   /* =====================================================
-       INITIAL STATISTICS
+       INITIALIZE
     ===================================================== */
 
-  function initializeStats() {
-
-    if (totalReferralsEl) {
-
-      totalReferralsEl.textContent =
-      "0";
-
-    }
-
-
-    if (totalEarningsEl) {
-
-      totalEarningsEl.textContent =
-      "0";
-
-    }
-
-
-    if (rankingEl) {
-
-      rankingEl.textContent =
-      "#--";
-
-    }
-
-
-    if (referralCountEl) {
-
-      referralCountEl.textContent =
-      "0";
-
-    }
-
-
-    if (leaderboardEl) {
-
-      leaderboardEl.innerHTML =
-
-      '<div class="leaderboard-loading">' +
-      'No leaderboard data yet.' +
-      '</div>';
-
-    }
-
-  }
-
-
-  /* =====================================================
-       START
-    ===================================================== */
-
-  function initializeReferralPage() {
+  async function initializeReferralPage() {
 
     initializeTelegram();
 
-    initializeStats();
+
+    /*
+         * Load the personal referral link.
+         */
 
     loadReferralLink();
+
+
+    /*
+         * Load real statistics and
+         * leaderboard from Supabase.
+         */
+
+    await loadReferralStats();
 
   }
 
@@ -677,7 +1012,7 @@
 
 
   /* =====================================================
-       DEBUG
+       DEBUG HELPERS
     ===================================================== */
 
   window.BTTCReferral = {
@@ -688,8 +1023,11 @@
     getLink:
     createReferralLink,
 
-    reload:
-    loadReferralLink
+    loadLink:
+    loadReferralLink,
+
+    loadStats:
+    loadReferralStats
 
   };
 
