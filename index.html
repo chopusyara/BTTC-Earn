@@ -1,0 +1,3005 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+  
+  <meta
+  name="theme-color"
+  content="#050609"
+  >
+
+  <title>BTTC Earn</title>
+
+  <link
+  rel="stylesheet"
+  href="style.css"
+  >
+
+</head>
+
+
+<body>
+
+  <div id="app">
+
+
+    <!-- =====================================
+                                 GLOBAL HEADER
+                            ====================================== -->
+
+    <header class="top-header">
+
+      <!-- LEFT PROFILE -->
+
+      <div class="profile-header">
+
+        <div class="avatar-wrapper">
+
+          <img
+          src="https://i.pravatar.cc/100"
+          alt="User Avatar"
+          class="user-avatar"
+          >
+
+        </div>
+
+        <div class="telegram-pill">
+          @username
+        </div>
+
+      </div>
+
+
+      <!-- RIGHT BALANCES -->
+
+      <div class="balance-stack">
+
+        <div class="mini-balance usdt-balance">
+
+          <div class="balance-info">
+
+            <span class="balance-label">
+              USDT
+            </span>
+
+            <span
+              id="usdtBalance"
+              class="balance-value"
+              >
+              0.00
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="mini-balance bttc-balance">
+
+          <div class="balance-info">
+
+            <span class="balance-label">
+              BTTC
+            </span>
+
+            <span
+              id="bttcBalance"
+              class="balance-value"
+              >
+              0
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+
+    <!-- =====================================
+                                 MAIN CONTENT
+                            ====================================== -->
+
+    <main id="page-container">
+
+
+      <!-- =================================
+                                                 HOME
+                                            ================================== -->
+
+      <section
+        id="home-page"
+        class="page active-page"
+        >
+
+
+        <!-- HOME HEADER -->
+
+        <div class="home-heading">
+
+          <div>
+
+            <span class="section-eyebrow">
+              BTTC EARN
+            </span>
+
+            <h1>
+              Mining Center
+            </h1>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- =================================
+                                                                 MINING CARD
+                                                            ================================== -->
+
+        <div class="mining-card">
+
+
+          <!-- BACKGROUND PARTICLES -->
+
+          <div class="mining-particles">
+
+            <span class="particle p1"></span>
+            <span class="particle p2"></span>
+            <span class="particle p3"></span>
+            <span class="particle p4"></span>
+            <span class="particle p5"></span>
+            <span class="particle p6"></span>
+            <span class="particle p7"></span>
+            <span class="particle p8"></span>
+
+          </div>
+
+
+          <!-- STATUS -->
+
+          <div
+            id="miningStatus"
+            class="mining-status"
+            >
+
+            READY TO MINE
+
+          </div>
+
+
+          <!-- CORE -->
+
+          <div class="mining-core">
+
+            <div class="core-glow"></div>
+
+            <div class="core-ring ring-one"></div>
+
+            <div class="core-ring ring-two"></div>
+
+            <div class="core-ring ring-three"></div>
+
+
+            <div class="core-center">
+
+              <div class="core-symbol">
+                BT
+              </div>
+
+            </div>
+
+          </div>
+
+<div class="user-info">
+
+  <img
+    src="default-avatar.png"
+    alt="Avatar"
+    data-user-avatar
+    class="user-avatar"
+  >
+
+  <div>
+
+    <div
+      class="user-name"
+      data-user-username
+    >
+      Loading...
+    </div>
+
+    <div
+      class="telegram-id"
+      data-user-telegram-id
+    >
+      Loading...
+    </div>
+
+  </div>
+
+</div>
+          <!-- EARNED -->
+
+          <div class="mining-earned">
+
+            <span class="earned-label">
+              SESSION EARNINGS
+            </span>
+
+            <div
+              id="sessionEarnings"
+              class="earned-value"
+              >
+              0.0000
+            </div>
+
+            <span class="earned-unit">
+              BTTC
+            </span>
+
+          </div>
+
+
+          <!-- RATE -->
+
+          <div class="mining-rate">
+
+            <span>
+              Mining Rate
+            </span>
+
+            <strong>
+              <span id="miningRate">
+                100
+              </span>
+              BTTC / hour
+            </strong>
+
+          </div>
+
+
+          <!-- TIMER -->
+
+          <div
+            id="miningTimer"
+            class="mining-timer"
+            >
+            Ready
+          </div>
+
+
+          <!-- MAIN BUTTON -->
+
+          <button
+            id="miningButton"
+            class="mining-button"
+            type="button"
+            >
+
+            <span id="miningButtonText">
+              START
+            </span>
+
+          </button>
+
+
+        </div>
+
+
+
+        <!-- =================================
+                                                                 QUICK ACTIONS
+                                                            ================================== -->
+
+        <div class="quick-actions">
+
+
+          <!-- DAILY -->
+
+          <button
+            class="quick-card daily-card"
+            type="button"
+            data-modal="daily-modal"
+            >
+
+            <div class="quick-icon">
+              🗓
+            </div>
+
+            <div class="quick-content">
+
+              <strong>
+                Daily
+              </strong>
+
+              <span>
+                Streak rewards
+              </span>
+
+            </div>
+
+            <span class="quick-arrow">
+              ›
+            </span>
+
+          </button>
+
+
+
+          <!-- PROMO -->
+
+          <button
+            class="quick-card promo-card"
+            type="button"
+            data-modal="promo-modal"
+            >
+
+            <div class="quick-icon">
+              🎟️
+            </div>
+
+            <div class="quick-content">
+
+              <strong>
+                Promo
+              </strong>
+
+              <span>
+                Enter a code
+              </span>
+
+            </div>
+
+            <span class="quick-arrow">
+              ›
+            </span>
+
+          </button>
+
+
+
+          <!-- SHOP -->
+
+          <button
+            class="quick-card shop-card"
+            type="button"
+            data-modal="shop-modal"
+            >
+
+            <div class="quick-icon">
+              🛒
+            </div>
+
+            <div class="quick-content">
+
+              <strong>
+                Shop
+              </strong>
+
+              <span>
+                Premium upgrades
+              </span>
+
+            </div>
+
+            <span class="quick-arrow">
+              ›
+            </span>
+
+          </button>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =================================
+                                                 REFERRAL
+                                            ================================== -->
+      <section id="referral-page" class="page">
+
+        <div class="referral-page">
+
+          <!-- HEADER -->
+          <div class="referral-heading">
+            <span class="section-eyebrow">REFERRAL PROGRAM</span>
+            <h1>Invite & Earn</h1>
+            <p>
+              Invite friends and earn BTTC together.
+            </p>
+          </div>
+
+
+          <!-- REWARD HERO -->
+          <div class="referral-hero">
+
+            <div class="referral-orbit orbit-one"></div>
+            <div class="referral-orbit orbit-two"></div>
+
+            <div class="referral-reward-icon">
+              👥
+            </div>
+
+            <span class="referral-reward-label">
+              YOUR REFERRAL REWARD
+            </span>
+
+            <div class="referral-reward">
+              <span>+</span>4000
+            </div>
+
+            <div class="referral-reward-unit">
+              BTTC
+            </div>
+
+            <p>
+              Earn 4000 BTTC for every successful referral.
+            </p>
+
+          </div>
+
+
+          <!-- REFERRAL LINK -->
+          <div class="referral-link-card">
+
+            <div class="card-label">
+              YOUR REFERRAL LINK
+            </div>
+
+            <div class="referral-link-box">
+
+              <span id="referral-link">
+                https://t.me/BTTC_EarnBot?start=123456
+              </span>
+
+              <button
+                id="copy-referral-btn"
+                class="copy-referral-btn"
+                type="button"
+                >
+                COPY
+              </button>
+
+            </div>
+
+            <button
+              id="invite-friends-btn"
+              class="invite-friends-btn"
+              type="button"
+              >
+              <span>✈️</span>
+              INVITE FRIENDS
+            </button>
+
+          </div>
+
+
+          <!-- STATS -->
+          <div class="referral-stats">
+
+            <div class="referral-stat-card">
+
+              <div class="stat-icon">
+                👥
+              </div>
+
+              <div class="stat-info">
+                <span>Total Referrals</span>
+                <strong id="total-referrals">
+                  0
+                </strong>
+              </div>
+
+            </div>
+
+
+            <div class="referral-stat-card earned-stat">
+
+              <div class="stat-icon">
+                💎
+              </div>
+
+              <div class="stat-info">
+                <span>BTTC Earned</span>
+                <strong id="referral-bttc-earned">
+                  0
+                </strong>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- LEADERBOARD -->
+          <div class="leaderboard-section">
+
+            <div class="section-title-row">
+
+              <div>
+                <span class="section-eyebrow">
+                  COMMUNITY
+                </span>
+
+                <h2>
+                  Referral Leaderboard
+                </h2>
+              </div>
+
+              <span class="leaderboard-icon">
+                🏆
+              </span>
+
+            </div>
+
+
+            <!-- TOP 3 -->
+            <div class="podium">
+
+              <!-- SECOND -->
+              <div class="podium-user second-place">
+
+                <div class="podium-avatar">
+                  <span>👤</span>
+                  <b>2</b>
+                </div>
+
+                <strong>
+                  @CryptoKing
+                </strong>
+
+                <span>
+                  42,000 BTTC
+                </span>
+
+                <div class="podium-block">
+                  2
+                </div>
+
+              </div>
+
+
+              <!-- FIRST -->
+              <div class="podium-user first-place">
+
+                <div class="crown">
+                  👑
+                </div>
+
+                <div class="podium-avatar">
+                  <span>👤</span>
+                  <b>1</b>
+                </div>
+
+                <strong>
+                  @BTTCMaster
+                </strong>
+
+                <span>
+                  68,000 BTTC
+                </span>
+
+                <div class="podium-block">
+                  1
+                </div>
+
+              </div>
+
+
+              <!-- THIRD -->
+              <div class="podium-user third-place">
+
+                <div class="podium-avatar">
+                  <span>👤</span>
+                  <b>3</b>
+                </div>
+
+                <strong>
+                  @EarnPro
+                </strong>
+
+                <span>
+                  31,000 BTTC
+                </span>
+
+                <div class="podium-block">
+                  3
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- OTHER USERS -->
+            <div class="leaderboard-list">
+
+              <div class="leaderboard-row">
+
+                <div class="rank">
+                  4
+                </div>
+
+                <div class="leaderboard-avatar">
+                  👤
+                </div>
+
+                <div class="leaderboard-user">
+                  <strong>@MiningBoy</strong>
+                  <span>12 referrals</span>
+                </div>
+
+                <strong class="leaderboard-earned">
+                  24,000
+                </strong>
+
+              </div>
+
+
+              <div class="leaderboard-row">
+
+                <div class="rank">
+                  5
+                </div>
+
+                <div class="leaderboard-avatar">
+                  👤
+                </div>
+
+                <div class="leaderboard-user">
+                  <strong>@BTTCFan</strong>
+                  <span>9 referrals</span>
+                </div>
+
+                <strong class="leaderboard-earned">
+                  18,000
+                </strong>
+
+              </div>
+
+
+              <div class="leaderboard-row">
+
+                <div class="rank">
+                  6
+                </div>
+
+                <div class="leaderboard-avatar">
+                  👤
+                </div>
+
+                <div class="leaderboard-user">
+                  <strong>@CryptoUser</strong>
+                  <span>7 referrals</span>
+                </div>
+
+                <strong class="leaderboard-earned">
+                  14,000
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =================================
+                                                 TASKS
+                                        ================================== -->
+      <!-- =====================================================
+                 TASKS PAGE
+            ===================================================== -->
+
+      <section id="tasks-page" class="page">
+
+        <div class="tasks-page">
+
+          <!-- HEADER -->
+          <div class="tasks-header">
+
+            <div>
+              <span class="section-eyebrow">EARN MORE</span>
+
+              <h1>Tasks</h1>
+
+              <p>
+                Complete simple tasks and earn BTTC.
+              </p>
+            </div>
+
+            <button
+              id="open-create-task"
+              class="create-task-btn"
+              type="button"
+              >
+              <span>＋</span>
+              CREATE TASK
+            </button>
+
+          </div>
+
+
+          <!-- TASK SUMMARY -->
+          <div class="task-summary">
+
+            <div class="task-summary-card">
+
+              <div class="task-summary-icon">
+                ⚡
+              </div>
+
+              <div>
+                <span>AVAILABLE</span>
+                <strong id="available-task-count">12</strong>
+              </div>
+
+            </div>
+
+
+            <div class="task-summary-card">
+
+              <div class="task-summary-icon reward">
+                💎
+              </div>
+
+              <div>
+                <span>YOUR TASK EARNINGS</span>
+                <strong id="task-earnings">0</strong>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- AVAILABLE TASKS -->
+
+          <div class="available-tasks-section">
+
+            <div class="tasks-section-title">
+
+              <div>
+                <span class="section-eyebrow">
+                  MARKETPLACE
+                </span>
+
+                <h2>Available Tasks</h2>
+              </div>
+
+              <span class="tasks-live">
+                ● LIVE
+              </span>
+
+            </div>
+
+
+            <div
+              id="available-tasks"
+              class="available-tasks"
+              >
+
+
+              <!-- TELEGRAM TASK -->
+
+              <article
+                class="task-card"
+                data-task-type="telegram"
+                >
+
+                <div class="task-card-top">
+
+                  <div class="task-type-icon telegram">
+                    📢
+                  </div>
+
+                  <span class="task-type-label">
+                    TELEGRAM
+                  </span>
+
+                </div>
+
+
+                <div class="task-card-content">
+
+                  <h3>
+                    Join Telegram Channel
+                  </h3>
+
+                  <p>
+                    Join the official channel
+                    and verify your membership.
+                  </p>
+
+                </div>
+
+
+                <div class="task-card-bottom">
+
+                  <div class="task-reward">
+
+                    <span>REWARD</span>
+
+                    <strong>
+                      +500 BTTC
+                    </strong>
+
+                  </div>
+
+                  <button
+                    class="task-action-btn"
+                    type="button"
+                    data-task="telegram"
+                    >
+                    JOIN
+                  </button>
+
+                </div>
+
+              </article>
+
+
+              <!-- VIDEO TASK -->
+
+              <article
+                class="task-card"
+                data-task-type="video"
+                >
+
+                <div class="task-card-top">
+
+                  <div class="task-type-icon video">
+                    ▶️
+                  </div>
+
+                  <span class="task-type-label">
+                    VIDEO
+                  </span>
+
+                </div>
+
+
+                <div class="task-card-content">
+
+                  <h3>
+                    Watch Video
+                  </h3>
+
+                  <p>
+                    Watch the complete video
+                    and receive your reward.
+                  </p>
+
+                </div>
+
+
+                <div class="task-card-bottom">
+
+                  <div class="task-reward">
+
+                    <span>REWARD</span>
+
+                    <strong>
+                      +750 BTTC
+                    </strong>
+
+                  </div>
+
+                  <button
+                    class="task-action-btn"
+                    type="button"
+                    data-task="video"
+                    >
+                    WATCH
+                  </button>
+
+                </div>
+
+              </article>
+
+
+              <!-- WEBSITE TASK -->
+
+              <article
+                class="task-card"
+                data-task-type="website"
+                >
+
+                <div class="task-card-top">
+
+                  <div class="task-type-icon website">
+                    🌐
+                  </div>
+
+                  <span class="task-type-label">
+                    WEBSITE
+                  </span>
+
+                </div>
+
+
+                <div class="task-card-content">
+
+                  <h3>
+                    Visit Website
+                  </h3>
+
+                  <p>
+                    Visit the advertiser website
+                    and stay for the required time.
+                  </p>
+
+                </div>
+
+
+                <div class="task-card-bottom">
+
+                  <div class="task-reward">
+
+                    <span>REWARD</span>
+
+                    <strong>
+                      +300 BTTC
+                    </strong>
+
+                  </div>
+
+                  <button
+                    class="task-action-btn"
+                    type="button"
+                    data-task="website"
+                    >
+                    VISIT
+                  </button>
+
+                </div>
+
+              </article>
+
+
+              <!-- SOCIAL TASK -->
+
+              <article
+                class="task-card"
+                data-task-type="social"
+                >
+
+                <div class="task-card-top">
+
+                  <div class="task-type-icon social">
+                    📱
+                  </div>
+
+                  <span class="task-type-label">
+                    SOCIAL
+                  </span>
+
+                </div>
+
+
+                <div class="task-card-content">
+
+                  <h3>
+                    Follow Social Account
+                  </h3>
+
+                  <p>
+                    Follow the requested account
+                    and verify your action.
+                  </p>
+
+                </div>
+
+
+                <div class="task-card-bottom">
+
+                  <div class="task-reward">
+
+                    <span>REWARD</span>
+
+                    <strong>
+                      +400 BTTC
+                    </strong>
+
+                  </div>
+
+                  <button
+                    class="task-action-btn"
+                    type="button"
+                    data-task="social"
+                    >
+                    FOLLOW
+                  </button>
+
+                </div>
+
+              </article>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+                 CREATE TASK MODAL
+            ===================================================== -->
+
+      <div
+        id="create-task-modal"
+        class="modal-overlay"
+        aria-hidden="true"
+        >
+
+        <div
+          class="create-task-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="create-task-title"
+          >
+
+          <button
+            id="close-create-task"
+            class="modal-close-btn"
+            type="button"
+            aria-label="Close"
+            >
+            ×
+          </button>
+
+
+          <div class="create-task-icon">
+            🚀
+          </div>
+
+
+          <span class="section-eyebrow">
+            ADVERTISE & EARN
+          </span>
+
+
+          <h2 id="create-task-title">
+            Create New Task
+          </h2>
+
+
+          <p class="create-task-description">
+            Promote your Telegram community
+            and reach active BTTC Earn users.
+          </p>
+
+
+          <!-- TELEGRAM URL -->
+
+          <div class="form-group">
+
+            <label for="task-telegram-url">
+              TELEGRAM CHANNEL / GROUP
+            </label>
+
+            <div class="input-wrap">
+
+              <span class="input-prefix">
+                🔗
+              </span>
+
+              <input
+              id="task-telegram-url"
+              type="url"
+              placeholder="https://t.me/..."
+              autocomplete="off"
+              >
+
+            </div>
+
+            <small>
+              Enter your public Telegram channel
+              or group link.
+            </small>
+
+          </div>
+
+
+          <!-- PLAN -->
+
+          <div class="form-group">
+
+            <label>
+              CHOOSE PLAN
+            </label>
+
+
+            <div class="task-plans">
+
+              <button
+                class="task-plan"
+                type="button"
+                data-price="1"
+                data-users="100"
+                >
+
+                <span class="plan-price">
+                  1 USDT
+                </span>
+
+                <span class="plan-users">
+                  100 USERS
+                </span>
+
+              </button>
+
+
+              <button
+                class="task-plan"
+                type="button"
+                data-price="5"
+                data-users="500"
+                >
+
+                <span class="plan-price">
+                  5 USDT
+                </span>
+
+                <span class="plan-users">
+                  500 USERS
+                </span>
+
+              </button>
+
+
+              <button
+                class="task-plan"
+                type="button"
+                data-price="10"
+                data-users="1000"
+                >
+
+                <span class="plan-price">
+                  10 USDT
+                </span>
+
+                <span class="plan-users">
+                  1,000 USERS
+                </span>
+
+              </button>
+
+
+              <button
+                class="task-plan"
+                type="button"
+                data-price="20"
+                data-users="2000"
+                >
+
+                <span class="plan-price">
+                  20 USDT
+                </span>
+
+                <span class="plan-users">
+                  2,000 USERS
+                </span>
+
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- SELECTED PLAN -->
+
+          <div
+            id="selected-plan-summary"
+            class="selected-plan-summary"
+            >
+
+            <span>
+              SELECTED PLAN
+            </span>
+
+            <strong id="selected-plan-text">
+              Select a plan
+            </strong>
+
+          </div>
+
+
+          <!-- CONFIRM -->
+
+          <button
+            id="confirm-task-btn"
+            class="confirm-task-btn"
+            type="button"
+            >
+            CONFIRM TASK
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           PROFILE PAGE
+      ===================================================== -->
+
+      <section id="profile-page" class="page">
+
+        <div class="profile-page">
+
+          <!-- PROFILE HEADER -->
+
+          <div class="profile-identity">
+
+            <div class="profile-avatar-wrap">
+
+              <div class="profile-avatar">
+                👤
+              </div>
+
+              <span class="profile-online-dot"></span>
+
+            </div>
+
+            <div class="profile-user-info">
+
+              <span class="section-eyebrow">
+                TELEGRAM ACCOUNT
+              </span>
+
+              <h1 id="profile-username">
+                @BTTCUser
+              </h1>
+
+              <div class="telegram-id-pill">
+                <span>✈️</span>
+
+                <span>
+                  ID: <strong id="telegram-user-id">
+                    123456789
+                  </strong>
+                </span>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+                       BALANCE CARDS
+                  ================================================== -->
+
+          <div class="profile-balances">
+
+            <!-- BTTC -->
+
+            <div class="profile-balance-card bttc-balance-card">
+
+              <div class="balance-card-top">
+
+                <div class="balance-coin bttc-coin">
+                  B
+                </div>
+
+                <span class="balance-label">
+                  BTTC BALANCE
+                </span>
+
+              </div>
+
+              <div class="balance-value-row">
+
+                <strong id="profile-bttc-balance">
+                  0
+                </strong>
+
+                <span>
+                  BTTC
+                </span>
+
+              </div>
+
+              <div class="balance-glow-line"></div>
+
+            </div>
+
+
+            <!-- USDT -->
+
+            <div class="profile-balance-card usdt-balance-card">
+
+              <div class="balance-card-top">
+
+                <div class="balance-coin usdt-coin">
+                  $
+                </div>
+
+                <span class="balance-label">
+                  USDT BALANCE
+                </span>
+
+              </div>
+
+              <div class="balance-value-row">
+
+                <strong id="profile-usdt-balance">
+                  0.00
+                </strong>
+
+                <span>
+                  USDT
+                </span>
+
+              </div>
+
+              <div class="balance-glow-line"></div>
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+                       ACCOUNT ACTIONS
+                  ================================================== -->
+
+          <div class="profile-actions">
+
+            <button
+              id="open-deposit-modal"
+              class="profile-action-card deposit-action"
+              type="button"
+              >
+
+              <div class="profile-action-icon">
+                ↓
+              </div>
+
+              <div class="profile-action-content">
+
+                <strong>
+                  Deposit USDT
+                </strong>
+
+                <span>
+                  Add USDT via BEP20
+                </span>
+
+              </div>
+
+              <span class="profile-action-arrow">
+                ›
+              </span>
+
+            </button>
+
+
+            <button
+              id="open-withdraw-modal"
+              class="profile-action-card withdraw-action"
+              type="button"
+              >
+
+              <div class="profile-action-icon">
+                ↑
+              </div>
+
+              <div class="profile-action-content">
+
+                <strong>
+                  Withdraw BTTC
+                </strong>
+
+                <span>
+                  Withdraw to Binance
+                </span>
+
+              </div>
+
+              <span class="profile-action-arrow">
+                ›
+              </span>
+
+            </button>
+
+          </div>
+
+
+          <!-- =================================================
+                       TRANSACTION HISTORY
+                  ================================================== -->
+
+          <div class="transaction-section">
+
+            <div class="profile-section-title">
+
+              <div>
+
+                <span class="section-eyebrow">
+                  ACCOUNT ACTIVITY
+                </span>
+
+                <h2>
+                  Transaction History
+                </h2>
+
+              </div>
+
+              <span class="transaction-icon">
+                ↕
+              </span>
+
+            </div>
+
+
+            <div
+              id="transaction-history"
+              class="transaction-list"
+              >
+
+              <!-- PENDING -->
+
+              <div class="transaction-row">
+
+                <div class="transaction-type deposit">
+                  ↓
+                </div>
+
+                <div class="transaction-info">
+
+                  <strong>
+                    USDT Deposit
+                  </strong>
+
+                  <span>
+                    BEP20 • Today
+                  </span>
+
+                </div>
+
+                <div class="transaction-right">
+
+                  <strong class="transaction-amount positive">
+                    +5.00 USDT
+                  </strong>
+
+                  <span class="transaction-status pending">
+                    Pending
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- CONFIRMED -->
+
+              <div class="transaction-row">
+
+                <div class="transaction-type withdraw">
+                  ↑
+                </div>
+
+                <div class="transaction-info">
+
+                  <strong>
+                    BTTC Withdrawal
+                  </strong>
+
+                  <span>
+                    Binance • Yesterday
+                  </span>
+
+                </div>
+
+                <div class="transaction-right">
+
+                  <strong class="transaction-amount">
+                    -20,000 BTTC
+                  </strong>
+
+                  <span class="transaction-status confirmed">
+                    Confirmed
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- REJECTED -->
+
+              <div class="transaction-row">
+
+                <div class="transaction-type deposit">
+                  ↓
+                </div>
+
+                <div class="transaction-info">
+
+                  <strong>
+                    USDT Deposit
+                  </strong>
+
+                  <span>
+                    BEP20 • 2 days ago
+                  </span>
+
+                </div>
+
+                <div class="transaction-right">
+
+                  <strong class="transaction-amount">
+                    +10.00 USDT
+                  </strong>
+
+                  <span class="transaction-status rejected">
+                    Rejected
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+                       ADMIN
+                  ================================================== -->
+
+          <div class="admin-section">
+
+            <button
+              id="open-admin-page"
+              class="admin-button"
+              type="button"
+              >
+
+              <span class="admin-crown">
+                👑
+              </span>
+
+              <span class="admin-button-text">
+
+                <strong>
+                  Admin
+                </strong>
+
+                <small>
+                  Manage BTTC Earn
+                </small>
+
+              </span>
+
+              <span class="admin-arrow">
+                ›
+              </span>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+<!-- =====================================================
+     ADMIN PAGE
+===================================================== -->
+
+<section id="admin-page" class="page">
+
+    <div class="admin-page">
+
+        <!-- =================================================
+             ADMIN HEADER
+        ================================================== -->
+
+        <div class="admin-header">
+
+            <button
+                id="admin-back-profile"
+                class="admin-back-button"
+                type="button"
+            >
+                ‹
+            </button>
+
+            <div class="admin-header-title">
+
+                <span class="section-eyebrow">
+                    CONTROL CENTER
+                </span>
+
+                <h1>
+                    Admin 👑
+                </h1>
+
+            </div>
+
+            <div class="admin-security-badge">
+                ●
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             WITHDRAWAL REQUESTS
+        ================================================== -->
+
+        <section class="admin-panel">
+
+            <div class="admin-panel-header">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        PAYOUT MANAGEMENT
+                    </span>
+
+                    <h2>
+                        Withdrawal
+                    </h2>
+
+                </div>
+
+                <span
+                    id="pending-withdrawal-count"
+                    class="admin-count-badge"
+                >
+                    0
+                </span>
+
+            </div>
+
+
+            <div
+                id="admin-withdrawal-list"
+                class="admin-request-list"
+            >
+
+                <!-- EXAMPLE REQUEST -->
+
+                <div
+                    class="admin-request withdrawal-request pending-request"
+                    data-request-id="withdraw-001"
+                >
+
+                    <div class="request-main">
+
+                        <div class="request-number">
+                            NO
+                            <strong>
+                                55 / 12
+                            </strong>
+                        </div>
+
+                        <div class="request-user">
+
+                            <span>
+                                Telegram ID
+                            </span>
+
+                            <strong>
+                                1218340563
+                            </strong>
+
+                        </div>
+
+                        <div class="request-user">
+
+                            <span>
+                                Binance
+                            </span>
+
+                            <strong>
+                                1218340563
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="request-actions">
+
+                        <button
+                            class="request-confirm confirm-withdrawal"
+                            type="button"
+                            title="Confirm withdrawal"
+                        >
+                            ✓
+                        </button>
+
+                        <button
+                            class="request-reject reject-withdrawal"
+                            type="button"
+                            title="Reject withdrawal"
+                        >
+                            ×
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             DEPOSIT REQUESTS
+        ================================================== -->
+
+        <section class="admin-panel">
+
+            <div class="admin-panel-header">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        FUNDING MANAGEMENT
+                    </span>
+
+                    <h2>
+                        Deposit
+                    </h2>
+
+                </div>
+
+                <span
+                    id="pending-deposit-count"
+                    class="admin-count-badge"
+                >
+                    0
+                </span>
+
+            </div>
+
+
+            <div
+                id="admin-deposit-list"
+                class="admin-request-list"
+            >
+
+                <div
+                    class="admin-request deposit-request pending-request"
+                    data-request-id="deposit-001"
+                    data-amount="15"
+                >
+
+                    <div class="deposit-request-info">
+
+                        <div class="deposit-user">
+
+                            <span>
+                                Telegram ID
+                            </span>
+
+                            <strong>
+                                1218340563
+                            </strong>
+
+                        </div>
+
+                        <div class="deposit-user">
+
+                            <span>
+                                Binance ID
+                            </span>
+
+                            <strong>
+                                1218340563
+                            </strong>
+
+                        </div>
+
+                        <div class="deposit-amount">
+
+                            <span>
+                                USDT
+                            </span>
+
+                            <strong>
+                                15
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="request-actions">
+
+                        <button
+                            class="request-confirm confirm-deposit"
+                            type="button"
+                        >
+                            ✓
+                        </button>
+
+                        <button
+                            class="request-reject reject-deposit"
+                            type="button"
+                        >
+                            ×
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CUSTOMERS
+        ================================================== -->
+
+        <section class="admin-panel customers-panel">
+
+            <div class="admin-panel-header">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        USER MODERATION
+                    </span>
+
+                    <h2>
+                        Customers
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <!-- PROMO -->
+
+            <div class="customer-subsection">
+
+                <div class="customer-subsection-title">
+
+                    <span>
+                        🎁 Pending Promo Requests
+                    </span>
+
+                    <span class="admin-mini-count">
+                        1
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="pending-promo-list"
+                    class="customer-request-list"
+                >
+
+                    <div
+                        class="customer-request"
+                        data-request-id="promo-001"
+                    >
+
+                        <div class="customer-request-top">
+
+                            <strong>
+                                3910837282
+                            </strong>
+
+                            <span>
+                                → 🎁 [0.1 / 20]
+                            </span>
+
+                        </div>
+
+
+                        <div class="customer-request-line">
+
+                            <span>
+                                CODE:
+                            </span>
+
+                            <strong class="promo-code">
+                                GOOGLETRANSLATE
+                            </strong>
+
+                        </div>
+
+
+                        <div class="customer-request-bottom">
+
+                            <span>
+                                @Packet_RedBox07
+                            </span>
+
+                            <strong>
+                                💰 200
+                            </strong>
+
+                            <button
+                                class="customer-confirm confirm-promo"
+                                type="button"
+                            >
+                                Confirm
+                            </button>
+
+                            <button
+                                class="customer-reject reject-promo"
+                                type="button"
+                            >
+                                Reject
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TASKS -->
+
+            <div class="customer-subsection">
+
+                <div class="customer-subsection-title">
+
+                    <span>
+                        📋 Pending Task Requests
+                    </span>
+
+                    <span class="admin-mini-count">
+                        1
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="pending-task-list"
+                    class="customer-request-list"
+                >
+
+                    <div
+                        class="customer-request"
+                        data-request-id="task-001"
+                    >
+
+                        <div class="customer-request-top">
+
+                            <strong>
+                                3910837282
+                            </strong>
+
+                            <span>
+                                → 🎁 [1 / 110]
+                            </span>
+
+                        </div>
+
+
+                        <div class="customer-request-bottom">
+
+                            <span>
+                                @Packet_RedBox07
+                            </span>
+
+                            <button
+                                class="task-enter-button"
+                                type="button"
+                            >
+                                Enter
+                            </button>
+
+                            <button
+                                class="customer-confirm confirm-task"
+                                type="button"
+                            >
+                                Confirm
+                            </button>
+
+                            <button
+                                class="customer-reject reject-task"
+                                type="button"
+                            >
+                                Reject
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CONFIRMATION HISTORY
+            ================================================== -->
+
+            <div class="customer-subsection history-subsection">
+
+                <div class="customer-subsection-title">
+
+                    <span>
+                        🗂 Confirmation History
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="customer-history-list"
+                    class="customer-request-list"
+                >
+
+                    <!-- ACTIVE PROMO -->
+
+                    <div
+                        class="customer-history-item"
+                        data-history-id="history-001"
+                    >
+
+                        <div class="history-top">
+
+                            <strong>
+                                3910837282
+                            </strong>
+
+                            <span>
+                                → 🎁 [0.1 / 20]
+                            </span>
+
+                            <span class="history-active">
+                                🟢 Active
+                            </span>
+
+                        </div>
+
+
+                        <div class="history-line">
+
+                            CODE:
+                            <strong class="history-rejected-code">
+                                🔴 GOOGLETRANSLATE
+                            </strong>
+
+                        </div>
+
+
+                        <div class="history-bottom">
+
+                            <span>
+                                @Packet_RedBox07
+                            </span>
+
+                            <strong>
+                                💰 200
+                            </strong>
+
+                            <button
+                                class="history-delete"
+                                type="button"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DISMISSED TASK -->
+
+                    <div
+                        class="customer-history-item dismissed"
+                        data-history-id="history-002"
+                    >
+
+                        <div class="history-top">
+
+                            <strong>
+                                3910837282
+                            </strong>
+
+                            <span>
+                                → 🎁 [1 / 110]
+                            </span>
+
+                            <span class="history-dismissed">
+                                🔴 Dismiss
+                            </span>
+
+                        </div>
+
+
+                        <div class="history-bottom">
+
+                            <span>
+                                @Packet_RedBox07
+                            </span>
+
+                            <strong>
+                                💰 100
+                            </strong>
+
+                            <button
+                                class="history-delete"
+                                type="button"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             MINERS
+        ================================================== -->
+
+        <section class="admin-panel miners-panel">
+
+            <div class="admin-panel-header">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        PLATFORM MANAGEMENT
+                    </span>
+
+                    <h2>
+                        Miners
+                    </h2>
+
+                </div>
+
+                <span class="miners-icon">
+                    ⛏
+                </span>
+
+            </div>
+
+
+            <!-- PLATFORM STATS -->
+
+            <div class="miner-stats">
+
+                <div class="miner-stat">
+
+                    <span>
+                        Total Users
+                    </span>
+
+                    <strong>
+                        1,200
+                    </strong>
+
+                </div>
+
+
+                <div class="miner-stat">
+
+                    <span>
+                        Total USDT
+                    </span>
+
+                    <strong>
+                        150
+                    </strong>
+
+                </div>
+
+
+                <div class="miner-stat">
+
+                    <span>
+                        Total Referrals
+                    </span>
+
+                    <strong>
+                        890
+                    </strong>
+
+                </div>
+
+
+                <div class="miner-stat">
+
+                    <span>
+                        Total PEPE
+                    </span>
+
+                    <strong>
+                        76,00,000
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- SEARCH -->
+
+            <div class="miner-search">
+
+                <span>
+                    🔎
+                </span>
+
+                <input
+                    id="miner-search-input"
+                    type="search"
+                    placeholder="Search Telegram ID..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <!-- USER -->
+
+            <div
+                id="miner-user-list"
+                class="miner-user-list"
+            >
+
+                <div
+                    class="miner-user-card"
+                    data-user-id="1292818129"
+                >
+
+                    <div class="miner-user-header">
+
+                        <div>
+
+                            <span class="miner-user-label">
+                                ID
+                            </span>
+
+                            <strong>
+                                1292818129
+                            </strong>
+
+                        </div>
+
+                        <span class="miner-user-status">
+                            ACTIVE
+                        </span>
+
+                    </div>
+
+
+                    <div class="miner-user-balances">
+
+                        <div>
+
+                            <span>
+                                USDT
+                            </span>
+
+                            <strong>
+                                17
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                PEPE
+                            </span>
+
+                            <strong>
+                                23,000
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="miner-user-details">
+
+                        <div>
+
+                            <span>
+                                Referral
+                            </span>
+
+                            <strong>
+                                15
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Withdrawal PEPE
+                            </span>
+
+                            <strong>
+                                205,000
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Deposit USDT
+                            </span>
+
+                            <strong>
+                                119
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="miner-user-actions">
+
+                        <button
+                            class="miner-block-button"
+                            type="button"
+                        >
+                            Block
+                        </button>
+
+                        <button
+                            class="miner-unblock-button"
+                            type="button"
+                        >
+                            Unblock
+                        </button>
+
+                        <button
+                            class="miner-edit-button"
+                            type="button"
+                        >
+                            Edit Coin
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <div class="admin-footer-space"></div>
+
+    </div>
+
+</section>
+      <!-- =====================================================
+           DEPOSIT MODAL
+      ===================================================== -->
+
+      <div
+        id="deposit-modal"
+        class="modal-overlay"
+        aria-hidden="true"
+        >
+
+        <div
+          class="profile-modal"
+          role="dialog"
+          aria-modal="true"
+          >
+
+          <button
+            id="close-deposit-modal"
+            class="modal-close-btn"
+            type="button"
+            >
+            ×
+          </button>
+
+
+          <div class="profile-modal-icon deposit-modal-icon">
+            ↓
+          </div>
+
+
+          <span class="section-eyebrow">
+            BEP20 NETWORK
+          </span>
+
+          <h2>
+            Deposit USDT
+          </h2>
+
+          <p class="profile-modal-description">
+            Send USDT to the deposit address below,
+            then submit your payment proof.
+          </p>
+
+
+          <!-- ADDRESS -->
+
+          <div class="deposit-address-box">
+
+            <span>
+              DEPOSIT ADDRESS
+            </span>
+
+            <div class="deposit-address">
+
+              <code id="deposit-address">
+                0xYourBEP20DepositAddress
+              </code>
+
+              <button
+                id="copy-deposit-address"
+                type="button"
+                >
+                COPY
+              </button>
+
+            </div>
+
+            <small>
+              Only send USDT through the BEP20 network.
+            </small>
+
+          </div>
+
+
+          <!-- AMOUNT -->
+
+          <div class="form-group">
+
+            <label for="deposit-amount">
+              DEPOSIT AMOUNT
+            </label>
+
+            <div class="input-wrap">
+
+              <span class="input-prefix">
+                $
+              </span>
+
+              <input
+              id="deposit-amount"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="Enter USDT amount"
+              >
+
+              <span class="input-suffix">
+                USDT
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- SCREENSHOT -->
+
+          <div class="form-group">
+
+            <label for="deposit-screenshot">
+              PAYMENT SCREENSHOT
+            </label>
+
+            <label
+              for="deposit-screenshot"
+              class="file-upload-box"
+              >
+
+              <span class="file-upload-icon">
+                📷
+              </span>
+
+              <span class="file-upload-text">
+
+                <strong>
+                  Attach screenshot
+                </strong>
+
+                <small>
+                  JPG, PNG or WEBP
+                </small>
+
+              </span>
+
+              <span class="file-upload-arrow">
+                ›
+              </span>
+
+            </label>
+
+            <input
+            id="deposit-screenshot"
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            hidden
+            >
+
+            <div
+              id="deposit-file-name"
+              class="selected-file-name"
+              ></div>
+
+          </div>
+
+
+          <button
+            id="submit-deposit"
+            class="profile-modal-submit"
+            type="button"
+            >
+            SUBMIT DEPOSIT
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           WITHDRAW MODAL
+      ===================================================== -->
+
+      <div
+        id="withdraw-modal"
+        class="modal-overlay"
+        aria-hidden="true"
+        >
+
+        <div
+          class="profile-modal"
+          role="dialog"
+          aria-modal="true"
+          >
+
+          <button
+            id="close-withdraw-modal"
+            class="modal-close-btn"
+            type="button"
+            >
+            ×
+          </button>
+
+
+          <div class="profile-modal-icon withdraw-modal-icon">
+            ↑
+          </div>
+
+
+          <span class="section-eyebrow">
+            BTTC WITHDRAWAL
+          </span>
+
+          <h2>
+            Withdraw BTTC
+          </h2>
+
+          <p class="profile-modal-description">
+            Enter your Binance ID and select
+            the amount you want to withdraw.
+          </p>
+
+
+          <!-- BINANCE ID -->
+
+          <div class="form-group">
+
+            <label for="binance-id">
+              BINANCE ID
+            </label>
+
+            <div class="input-wrap">
+
+              <span class="input-prefix">
+                B
+              </span>
+
+              <input
+              id="binance-id"
+              type="text"
+              placeholder="Enter Binance ID"
+              autocomplete="off"
+              >
+
+            </div>
+
+          </div>
+
+
+          <!-- WITHDRAW AMOUNTS -->
+
+          <div class="form-group">
+
+            <label>
+              SELECT WITHDRAWAL AMOUNT
+            </label>
+
+            <div class="withdraw-amount-grid">
+
+              <button
+                class="withdraw-amount"
+                type="button"
+                data-amount="20000"
+                >
+                20,000
+              </button>
+
+              <button
+                class="withdraw-amount"
+                type="button"
+                data-amount="40000"
+                >
+                40,000
+              </button>
+
+              <button
+                class="withdraw-amount"
+                type="button"
+                data-amount="75000"
+                >
+                75,000
+              </button>
+
+              <button
+                class="withdraw-amount"
+                type="button"
+                data-amount="100000"
+                >
+                100,000
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- SELECTED -->
+
+          <div class="selected-withdraw-box">
+
+            <span>
+              SELECTED
+            </span>
+
+            <strong id="selected-withdraw-amount">
+              Select amount
+            </strong>
+
+          </div>
+
+
+          <button
+            id="submit-withdraw"
+            class="profile-modal-submit withdraw-submit"
+            type="button"
+            >
+            REQUEST WITHDRAWAL
+          </button>
+
+        </div>
+
+      </div>
+
+    </main>
+
+
+
+    <!-- =====================================
+                                 BOTTOM NAVIGATION
+                            ====================================== -->
+
+    <nav class="bottom-navigation">
+
+      <button
+        class="nav-item active-nav"
+        data-page="home-page"
+        type="button"
+        >
+
+        <span class="nav-icon">
+          🏠
+        </span>
+
+        <span class="nav-label">
+          Home
+        </span>
+
+      </button>
+
+
+      <button
+        class="nav-item"
+        data-page="referral-page"
+        type="button"
+        >
+
+        <span class="nav-icon">
+          👥
+        </span>
+
+        <span class="nav-label">
+          Referral
+        </span>
+
+      </button>
+
+
+      <button
+        class="nav-item"
+        data-page="tasks-page"
+        type="button"
+        >
+
+        <span class="nav-icon">
+          📋
+        </span>
+
+        <span class="nav-label">
+          Tasks
+        </span>
+
+      </button>
+
+
+      <button
+        class="nav-item"
+        data-page="profile-page"
+        type="button"
+        >
+
+        <span class="nav-icon">
+          👤
+        </span>
+
+        <span class="nav-label">
+          Profile
+        </span>
+
+      </button>
+
+    </nav>
+
+
+
+    <!-- =====================================
+                                 DAILY MODAL
+                            ====================================== -->
+
+    <div
+      id="daily-modal"
+      class="modal-overlay"
+      >
+
+      <div class="modal">
+
+        <button
+          class="modal-close"
+          type="button"
+          >
+          ×
+        </button>
+
+        <div class="modal-icon">
+          🗓
+        </div>
+
+        <h2>
+          Daily Rewards
+        </h2>
+
+        <p>
+          Your weekly streak rewards
+        </p>
+
+        <div class="modal-demo">
+
+          <span>
+            Day 1
+          </span>
+
+          <strong>
+            0.0005 USDT
+          </strong>
+
+        </div>
+
+        <button
+          class="modal-primary"
+          type="button"
+          >
+          CLAIM DAILY REWARD
+        </button>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+                                 PROMO MODAL
+                            ====================================== -->
+
+    <div
+      id="promo-modal"
+      class="modal-overlay"
+      >
+
+      <div class="modal">
+
+        <button
+          class="modal-close"
+          type="button"
+          >
+          ×
+        </button>
+
+        <div class="modal-icon">
+          🎟️
+        </div>
+
+        <h2>
+          Promo Code
+        </h2>
+
+        <p>
+          Enter your promotional code
+        </p>
+
+        <input
+        class="modal-input"
+        type="text"
+        placeholder="Enter Promo Code"
+        >
+
+        <button
+          class="modal-primary"
+          type="button"
+          >
+          ENTER
+        </button>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+                                 SHOP MODAL
+                            ====================================== -->
+
+    <div
+      id="shop-modal"
+      class="modal-overlay"
+      >
+
+      <div class="modal shop-modal">
+
+        <button
+          class="modal-close"
+          type="button"
+          >
+          ×
+        </button>
+
+        <div class="modal-icon">
+          🛒
+        </div>
+
+        <h2>
+          Premium Shop
+        </h2>
+
+        <p>
+          Upgrade your earning experience
+        </p>
+
+
+        <div class="shop-demo-card">
+
+          <div>
+
+            <strong>
+              🔵 Blue Tick
+            </strong>
+
+            <span>
+              Lifetime priority withdrawal
+            </span>
+
+          </div>
+
+          <b>
+            1 USDT
+          </b>
+
+        </div>
+
+
+        <div class="shop-demo-card">
+
+          <div>
+
+            <strong>
+              ⚡ 2× Mining Speed
+            </strong>
+
+            <span>
+              Active for 30 days
+            </span>
+
+          </div>
+
+          <b>
+            1 USDT
+          </b>
+
+        </div>
+
+      </div>
+
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="app.js"></script>
+    
+    <script src="app.js"></script>
+
+  </div>
+
+</body>
+
+</html>
